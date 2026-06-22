@@ -1,0 +1,28 @@
+# Sequencing antagonism between anti-CD3 and antigen-specific tolerance in type 1 diabetes
+
+**Author:** Seth Cope — Independent researcher (ORCID: [0009-0000-5520-915X](https://orcid.org/0009-0000-5520-915X))
+
+## Abstract
+
+We build the first mechanistic within-host model of an unexplained pre-clinical drug-drug
+interaction in type 1 diabetes. Foster et al. (2025, NOD mice) reported that anti-CD3 monoclonal
+antibody (teplizumab-class) reduces the efficacy of antigen-specific (mRNA/peptide) tolerance
+immunotherapy - yet both are being pushed toward combination use, making sequencing a live clinical
+question. A three-state ODE in which autoreactive effectors and antigen-specific Tregs form a
+bistable switch driving beta-cell mass reproduces the Foster antagonism and yields a falsifiable
+prediction about how to time and sequence the two therapies. Illustrative modeling hypothesis, not
+validated clinical findings.
+
+## Status
+
+Illustrative within-host modeling study / hypothesis generation — not validated experimental or clinical findings, not a cure. Developed with AI assistance (disclosed).
+
+## License
+
+Code: MIT. Text, figures, and prose: CC-BY-4.0
+(https://creativecommons.org/licenses/by/4.0/).
+
+## How to cite
+
+> Seth Cope (2026). *Sequencing antagonism between anti-CD3 and antigen-specific tolerance in type 1 diabetes* GitHub: sethc555/type1-diabetes-research.
+> ORCID: 0009-0000-5520-915X.

@@ -1,0 +1,39 @@
+# claimcheck manifest — machine-checkable attestation for this study.
+# Verify:  pubkit attest <repo>   (runs claimcheck -> writes attestation.json under the 4 GB cap)
+# Each claim's `reproduce` command must exit 0 IFF the claim holds.
+schema: claimcheck/v0.1
+
+artifact:
+  title: "Sequencing antagonism between anti-CD3 and antigen-specific tolerance in type 1 diabetes"
+  author: "Seth Cope"
+  orcid: "0009-0000-5520-915X"
+  doi: ""                       # minted at publish time (pubkit zenodo)
+  repo: "https://github.com/sethc555/type1-diabetes-research"
+
+environment:
+  runner: "python3"
+  workdir: "analysis"
+  setup: "pip install -r requirements.txt"
+  memory_cap_mb: 4096           # enforced as a ulimit per claim
+  timeout_s: 595
+
+claims:
+  - id: all
+    statement: >-
+      The full verification suite re-derives and asserts every load-bearing number in FINDINGS.md
+      (24 checks): the effector<->Treg switch is bistable (autoimmune basin B->0.002, tolerant basin
+      B->0.931); untreated stage 2 reaches diagnosis in ~2 yr; anti-CD3 monotherapy only delays;
+      tolerance monotherapy gives 100% cohort durable control; anti-CD3 ANTAGONIZES tolerance when
+      given first/simultaneously; the sequencing rule holds (tol->anti-CD3 >= anti-CD3->tol, with
+      tol-first fully rescuing); the inter-drug gap prediction; no order-inversion in the
+      Treg-sparing regime (rho<1); and the two-channel caveat (order inverts at high rho). It also
+      PINS THE EXACT cited figures within tolerance: the cohort durable-control fractions
+      (0/0/100/58.8/41.2/100 %) and the calibration anchors (untreated median 2.06 yr, ~45%
+      progressed by 2 yr, anti-CD3 monotherapy delay +0.68 yr). The exact full-grid robustness
+      counts (171/171; 17/228) are reproduced by t1d_experiments.py (too slow for the per-claim cap;
+      verify asserts the invariant on a reduced grid). Finally it asserts the two DERIVED closed-form
+      criteria (t1d_analytic.py): the antagonism factor A^rho*sigT/(sigT+(1-rho)sigA) ~= measured
+      Y_sim/Y_tol, and the order-inversion law tol-first-optimal <=> A^rho > A <=> rho < 1 (crossover
+      rho*=1), each validated against the full ODE.
+    reproduce: "python3 verify_claims.py"
+    expect: { exit_code: 0 }

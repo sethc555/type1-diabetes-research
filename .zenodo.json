@@ -1,0 +1,23 @@
+{
+  "title": "Sequencing antagonism between anti-CD3 and antigen-specific tolerance in type 1 diabetes",
+  "description": "We build the first mechanistic within-host model of an unexplained pre-clinical drug-drug\ninteraction in type 1 diabetes. Foster et al. (2025, NOD mice) reported that anti-CD3 monoclonal\nantibody (teplizumab-class) reduces the efficacy of antigen-specific (mRNA/peptide) tolerance\nimmunotherapy - yet both are being pushed toward combination use, making sequencing a live clinical\nquestion. A three-state ODE in which autoreactive effectors and antigen-specific Tregs form a\nbistable switch driving beta-cell mass reproduces the Foster antagonism and yields a falsifiable\nprediction about how to time and sequence the two therapies. Illustrative modeling hypothesis, not\nvalidated clinical findings.",
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "MIT",
+  "creators": [
+    {
+      "name": "Cope, Seth",
+      "orcid": "0009-0000-5520-915X",
+      "affiliation": "Independent researcher"
+    }
+  ],
+  "keywords": [
+    "type 1 diabetes",
+    "anti-CD3",
+    "teplizumab",
+    "antigen-specific tolerance",
+    "within-host modeling",
+    "bistability",
+    "immunotherapy combination"
+  ]
+}

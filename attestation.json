@@ -1,0 +1,40 @@
+{
+  "schema": "claimcheck/v0.1",
+  "manifest_sha256": "7ae0a58b8dd04e067101e847ebdb37495ab3d92caf4b07bcd0ab5713254147f2",
+  "artifact": {
+    "title": "Sequencing antagonism between anti-CD3 and antigen-specific tolerance in type 1 diabetes",
+    "author": "Seth Cope",
+    "orcid": "0009-0000-5520-915X",
+    "doi": "",
+    "repo": "https://github.com/sethc555/type1-diabetes-research",
+    "commit": null,
+    "working_tree_dirty": false
+  },
+  "verifier": {
+    "name": "claimcheck",
+    "version": "0.1.0"
+  },
+  "verified_at": "2026-06-22T22:10:55.772851+00:00",
+  "host": {
+    "platform": "Linux-6.17.0-35-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3"
+  },
+  "environment_hash": "sha256:5c919a0816d15ec4c3f38c15a1466794645df9876ff1e9e48be87a24037d72f8",
+  "results": [
+    {
+      "id": "all",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 58.2,
+      "detail": "",
+      "stdout_tail": "\n============================================================\n24/24 checks passed"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "all_passed": true
+  },
+  "signature": null,
+  "note": "Unsigned MVP. Trust = re-runnability: run `claimcheck verify` yourself on a clean checkout to reproduce this result. Attests COMPUTATIONAL REPRODUCIBILITY only, not correctness of the underlying science."
+}
