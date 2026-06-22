@@ -24,5 +24,6 @@ Code: MIT. Text, figures, and prose: CC-BY-4.0
 
 ## How to cite
 
-> Seth Cope (2026). *Sequencing antagonism between anti-CD3 and antigen-specific tolerance in type 1 diabetes* GitHub: sethc555/type1-diabetes-research.
+> Seth Cope (2026). *Sequencing antagonism between anti-CD3 and antigen-specific tolerance in type 1 diabetes* DOI: [10.5281/zenodo.20804558](https://doi.org/10.5281/zenodo.20804558).
+GitHub: sethc555/type1-diabetes-research.
 > ORCID: 0009-0000-5520-915X.

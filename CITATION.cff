@@ -12,6 +12,7 @@ authors:
     affiliation: "Independent researcher"
 repository-code: "https://github.com/sethc555/type1-diabetes-research"
 url: "https://github.com/sethc555/type1-diabetes-research"
+doi: "10.5281/zenodo.20804558"
 license: MIT
 keywords:
   - type 1 diabetes

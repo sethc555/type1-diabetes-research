@@ -1,5 +1,7 @@
 # Sequencing antagonism between anti-CD3 and antigen-specific tolerance in type 1 diabetes
 
+> 📄 **Read the manuscript:** [**rendered web version**](https://sethc555.github.io/type1-diabetes-research/) · [PDF](docs/manuscript.pdf) · [Zenodo DOI: 10.5281/zenodo.20804558](https://doi.org/10.5281/zenodo.20804558)
+
 > **Status — illustrative within-host modeling / hypothesis generation, NOT clinical findings.**
 > This repository contains a deliberately simplified mechanistic model built to *explain* one
 > published, unexplained pre-clinical observation and to generate a falsifiable prediction. The
