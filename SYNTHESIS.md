@@ -125,6 +125,10 @@ lands all of them is the point); 5–8, 11, and the prevention-half of 12 are th
   identifiability reported — the median pins the *timescale* (and `kappa×E`), not `kappa` alone (`calib_tn10.py`).
   And the **spreading clock** is fit to the Ziegler 2013 / TEDDY natural history (multiple-Ab → T1D 70%@10yr;
   single-Ab 14.5%@10yr) — spreading ~0.04/yr, and *clinical progression requires spreading* (`calib_teddy.py`).
+  And the C-peptide readout **cross-validates** the model: the post-diagnosis decline rate (Shields 2018)
+  independently matches `kappa` within 6% — **~0.6/yr confirmed by two unrelated datasets** — and the anti-CD3
+  effect calibrated on *stage 2* **predicts** the PROTECT *stage-3* C-peptide preservation (`calib_cpeptide.py`).
+  That cross-dataset consistency is something the free-knob model could not claim.
 - **Mechanistically grounded predictions** (literature supports the premise, outcome untested): β-protection
   as spreading-brake + safe adjunct; broad/early tolerance beats single; anti-CD20 + tolerance combination.
 - **Modeling abstractions** (conscious, catalogued): bistable cell-fate switch (AS1, robustness-checked),
