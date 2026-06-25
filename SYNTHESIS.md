@@ -128,7 +128,9 @@ lands all of them is the point); 5–8, 11, and the prevention-half of 12 are th
   And the C-peptide readout **cross-validates** the model: the post-diagnosis decline rate (Shields 2018)
   independently matches `kappa` within 6% — **~0.6/yr confirmed by two unrelated datasets** — and the anti-CD3
   effect calibrated on *stage 2* **predicts** the PROTECT *stage-3* C-peptide preservation (`calib_cpeptide.py`).
-  That cross-dataset consistency is something the free-knob model could not claim.
+  That cross-dataset consistency is something the free-knob model could not claim. **→ The full calibration
+  phase (4 fits, the two-clock structure, both cross-validations, and identifiability) is in
+  [CALIBRATION.md](CALIBRATION.md).**
 - **Mechanistically grounded predictions** (literature supports the premise, outcome untested): β-protection
   as spreading-brake + safe adjunct; broad/early tolerance beats single; anti-CD20 + tolerance combination.
 - **Modeling abstractions** (conscious, catalogued): bistable cell-fate switch (AS1, robustness-checked),
