@@ -120,6 +120,9 @@ lands all of them is the point); 5–8, 11, and the prevention-half of 12 are th
   safety, teplizumab response biomarkers, checkpoint-induced T1D — and, **semi-quantitatively anchored in real
   effect sizes**, the genotype→phenotype map (HLA onset-age gradient, DQ6 protection, insulin/GAD endotype;
   Erlich 2008 / Sharp 2019 / Bauer 2019) — the first **calibrated** plank, vs the free knobs below.
+- **Fit to trial data** (calibration, not just reproduction): the disease **timescale** is fit to the TN10
+  placebo curve (median 24.4 mo) and teplizumab's ~2-yr delay to a **24% anti-CD3 effect** (Herold 2019);
+  identifiability reported — the median pins the *timescale* (and `kappa×E`), not `kappa` alone (`calib_tn10.py`).
 - **Mechanistically grounded predictions** (literature supports the premise, outcome untested): β-protection
   as spreading-brake + safe adjunct; broad/early tolerance beats single; anti-CD20 + tolerance combination.
 - **Modeling abstractions** (conscious, catalogued): bistable cell-fate switch (AS1, robustness-checked),
