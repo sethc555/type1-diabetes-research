@@ -123,6 +123,8 @@ lands all of them is the point); 5–8, 11, and the prevention-half of 12 are th
 - **Fit to trial data** (calibration, not just reproduction): the disease **timescale** is fit to the TN10
   placebo curve (median 24.4 mo) and teplizumab's ~2-yr delay to a **24% anti-CD3 effect** (Herold 2019);
   identifiability reported — the median pins the *timescale* (and `kappa×E`), not `kappa` alone (`calib_tn10.py`).
+  And the **spreading clock** is fit to the Ziegler 2013 / TEDDY natural history (multiple-Ab → T1D 70%@10yr;
+  single-Ab 14.5%@10yr) — spreading ~0.04/yr, and *clinical progression requires spreading* (`calib_teddy.py`).
 - **Mechanistically grounded predictions** (literature supports the premise, outcome untested): β-protection
   as spreading-brake + safe adjunct; broad/early tolerance beats single; anti-CD20 + tolerance combination.
 - **Modeling abstractions** (conscious, catalogued): bistable cell-fate switch (AS1, robustness-checked),
