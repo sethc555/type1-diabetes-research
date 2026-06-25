@@ -247,3 +247,64 @@ sweep exceeds the per-claim 595 s attestation cap — they remain reproduced by 
 and re-confirmed in the re-audit, with verify asserting the no-inversion invariant on a reduced grid
 (same policy as the HIV exemplar for its expensive sweeps). Re-run capped: **24/24 PASS, 58 s, 110 MB
 peak**; re-attested.
+
+---
+
+## Post-publication reversal (2026-06-22) — the v1 headline is WITHDRAWN as an artifact
+
+_This is the most important entry in this file. After the preprint was published (GitHub / Zenodo
+10.5281/zenodo.20804558 / Pages / social) we sent the result to an immunologist for review; his
+critique, plus a verified-biology rebuild, overturned the headline. Both audits above — which passed
+the repo as "reproducible and largely honest" — **missed it**, and it is worth being precise about why._
+
+### The critique (an immunologist reviewer)
+
+1. **No thymic Treg source** — the therapeutic Treg pool was built entirely by peripheral conversion.
+   *Valid as stated.* (His proposed fix — a NOD thymic-precursor *deletion* deficit — is itself
+   contradicted by the NOD literature: thymic Treg output is normal-to-enhanced, Feuerer 2007/09. The
+   real bottleneck is peripheral expansion, Mhanna/Tang 2021. So we corrected the gap, not via his
+   mechanism.)
+2. **Tolerance-monotherapy = 100% was uncalibrated** — a byproduct of the parameters, anchored to no
+   measured tolerance result; tolerance is constitutively impaired in T1D. **Correct and load-bearing.**
+3. **The operating point inverted the clinical rationale** — with tolerance alone = 100% and anti-CD3
+   alone = 0%, the model argues *against* combining; the real reason anti-CD3 is added is that
+   antigen-specific tolerance under-delivers. **Correct — the fatal point.**
+
+### Why both prior audits missed it (the honest post-mortem)
+
+The audits above were **internal-consistency and reproducibility** audits. They confirmed every number
+re-derived (24/24), that the docs agreed, that the ordering survived threshold/cohort/horizon/`n`
+sweeps, and that the disclosed caveats were carried. **None of that can catch the actual error**, which
+was not a reproducibility failure but a **calibration / framing failure**: the *operating point itself*
+(tolerance-monotherapy ≈ 100%, anti-CD3 ≈ 0%) was never anchored to an empirical number, and in that
+regime an "antagonism" is nearly forced — anything perturbing an already-maximal monotherapy can only
+look harmful. An adversarial-reproduction audit re-derives the math inside the chosen regime; it does
+not ask *"is this regime the right one, and does it invert the clinical rationale?"* That question
+needed a domain expert, and is exactly the gap the reviewer filled. **Lesson for the method: a verify/audit
+pass that re-derives numbers is necessary but not sufficient — every load-bearing operating point needs
+an explicit empirical calibration anchor (or a stated `UNCALIBRATED` flag), and a "does this invert the
+known clinical rationale?" check, before publication.**
+
+### The verified-biology rebuild and the structural result (v2 → v3 → v4)
+
+Rebuilt on retrieved primary literature (peripheral bottleneck; durable beneficial anti-CD3
+hyporesponsiveness; effector resistance), the model **reverses** the v1 conclusion and produces a
+clean negative result:
+
+- **v3** (peripheral two-channel) and **v4** (v3 + an explicit acute-deletion channel added *to try to
+  manufacture the antagonism*) both predict the combination **never antagonizes**: best-combo −
+  best-mono **≥ 0 at every platform-independence `psi`**, and **synergizes** (+65/+76 pts at mid `psi`
+  in v3; **+100 pts at `psi`=0 in v4**, the pure-antigen Foster/Stewart regime).
+- **The structural negative result:** anti-CD3's effector-reduction + durable hyporesponsiveness are
+  intrinsically pro-tolerant in a bistable population model, so **no population channel can flip the
+  sign**. The Foster 2025 / Stewart 2020 antagonism therefore requires a **clone-level acute mechanism**
+  (deleting the specific just-activated converting clones) that a deterministic lumped-pool ODE averages
+  away. This is now `FINDINGS_final.md`, asserted by **`verify_claims_vfinal.py` (7/7 PASS, capped)**.
+
+### Status of the published artifacts
+
+The public v1 (README/FINDINGS/MANUSCRIPT/Zenodo/Pages/social) still asserts the withdrawn
+tolerance-first headline. A post-publication revision is **owed and pending sign-off**: README +
+FINDINGS now carry a SUPERSEDED banner pointing here and to `FINDINGS_final.md`; a Zenodo new version
+and a reply to the reviewer are prepared but **not yet sent** (held deliberately until the v-final is
+reviewed). v1's files are retained, clearly marked superseded, as the honesty record.

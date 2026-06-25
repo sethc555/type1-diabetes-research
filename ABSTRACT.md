@@ -2,6 +2,15 @@
 
 **Author:** Seth Cope — Independent researcher (ORCID: [0009-0000-5520-915X](https://orcid.org/0009-0000-5520-915X))
 
+> ⚠️ **SUPERSEDED (v1).** This one-page abstract describes the original "sequencing antagonism"
+> headline, which was **withdrawn** — it rested on an uncalibrated operating point (reviewer critique).
+> The corrected and much-expanded work is in **[README.md](README.md)** and
+> [analysis/FINDINGS_final.md](analysis/FINDINGS_final.md): the combination is *platform-dependent*
+> (conversion-type co-dosing antagonizes, reproducing Foster; expansion-type is safe, matching the
+> human AG019+teplizumab trial), the antagonism is a *clone-level/stochastic* effect, plus
+> teplizumab-responder prediction, an exhaustion-hierarchy layer (which predicts checkpoint-induced
+> T1D), and a β-cell-stress layer. Kept verbatim below as the honesty record.
+
 ## Abstract
 
 We build the first mechanistic within-host model of an unexplained pre-clinical drug-drug

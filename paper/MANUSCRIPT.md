@@ -5,6 +5,14 @@
 _Preprint draft — illustrative modeling study / hypothesis generation. Not validated experimental
 or clinical findings. Convert to PDF (e.g. `pandoc MANUSCRIPT.md -o manuscript.pdf`) for posting._
 
+> ⚠️ **SUPERSEDED (v1).** This manuscript draft states the original "sequencing antagonism" headline,
+> now **withdrawn** (uncalibrated operating point — reviewer critique; see
+> [../analysis/AUDIT.md](../analysis/AUDIT.md) §"Post-publication reversal"). The current, expanded body
+> of work — *platform-dependent* combination, the *clone-level* Foster mechanism, teplizumab-responder
+> prediction, the exhaustion hierarchy, and the β-cell-stress layer — is summarized in
+> **[../README.md](../README.md)** and the `../analysis/FINDINGS_*.md` docs. A formal manuscript rewrite
+> is pending the publish decision. Kept below as the record.
+
 ---
 
 ## Abstract

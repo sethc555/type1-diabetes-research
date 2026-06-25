@@ -1,5 +1,14 @@
 # Findings — sequencing antagonism between anti-CD3 and antigen-specific tolerance in T1D
 
+> ⚠️ **SUPERSEDED (2026-06-22) — read [FINDINGS_final.md](FINDINGS_final.md) instead.**
+> The "tolerance-first sequencing antagonism" headline below is **withdrawn as an artifact.** A
+> post-publication critique from an immunologist (an immunologist reviewer) showed the
+> tolerance-monotherapy = 100% operating point was uncalibrated and inverted the clinical rationale.
+> A verified-biology rebuild **reverses** the conclusion: the combination is **synergistic**, and the
+> Foster/Stewart antagonism is a **clone-level** effect a bistable population model cannot capture.
+> See [FINDINGS_final.md](FINDINGS_final.md) and [AUDIT.md](AUDIT.md) §"Post-publication reversal".
+> This file is retained, unaltered below, as the honesty record of the original claim.
+
 _All numbers below are re-derived and asserted by `verify_claims.py` (24/24 PASS). Status:
 illustrative within-host modeling / hypothesis generation — **not** validated clinical findings.
 Read with [MEMO.md](MEMO.md) (the literature lane) and [AUDIT.md](AUDIT.md)._

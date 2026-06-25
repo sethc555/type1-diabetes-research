@@ -1,137 +1,128 @@
-# Sequencing antagonism between anti-CD3 and antigen-specific tolerance in type 1 diabetes
-
-> 📄 **Read the manuscript:** [**rendered web version**](https://sethc555.github.io/type1-diabetes-research/) · [PDF](docs/manuscript.pdf) · [Zenodo DOI: 10.5281/zenodo.20804558](https://doi.org/10.5281/zenodo.20804558)
+# Type 1 diabetes immunotherapy — a within-host modeling exploration
 
 > **Status — illustrative within-host modeling / hypothesis generation, NOT clinical findings.**
-> This repository contains a deliberately simplified mechanistic model built to *explain* one
-> published, unexplained pre-clinical observation and to generate a falsifiable prediction. The
-> parameters are illustrative beyond a single calibrated progression-timing anchor; "cure" means
-> durable in-model β-cell preservation, not a clinical outcome. Nothing here is a validated clinical
-> result. Read it as a quantitative hypothesis, not as evidence.
+> Every result here is a quantitative *hypothesis* from a deliberately simplified mechanistic model,
+> labeled with its evidence and its caveats. Nothing is a validated clinical result. The repo is run
+> **honesty-first**: machine-checkable claims, adversarial self-audits that retract overclaims (one
+> headline was publicly reversed — see below), a standing assumption registry, and Semantic-Scholar
+> grounding at every step.
 
-## The arc
+> ## ⚠️ Correction history — the honesty trail
+> The original published headline (Zenodo [10.5281/zenodo.20804558](https://doi.org/10.5281/zenodo.20804558))
+> claimed a **"tolerance-first sequencing antagonism."** It was **withdrawn** after an immunologist
+> (an immunologist reviewer) showed it rested on an **uncalibrated** operating point that
+> inverted the clinical rationale. The corrected result and the post-mortem are in
+> [analysis/FINDINGS_final.md](analysis/FINDINGS_final.md) and [analysis/AUDIT.md](analysis/AUDIT.md)
+> §"Post-publication reversal". That reversal is kept visible on purpose — it is how this work is
+> supposed to behave, and it is what the rest of the model was rebuilt to deserve.
 
-Foster et al. 2025 (NOD mice, ADA abstract 2136-LB) reported an unexplained, unmodeled result:
-anti-CD3 monoclonal antibody (teplizumab-class) *reduces* the efficacy of antigen-specific
-(mRNA/peptide) tolerance immunotherapy — and both are being pushed toward combination use, so
-*whether and how to combine them* is a live clinical question. The T1D "modeling" literature is
-statistical/ML (Patil 2024, Montaser 2026); no mechanistic within-host model of this drug–drug
-interaction existed. We built the first one: a 3-state ODE in which autoreactive effectors and
-antigen-specific Tregs form a bistable switch driving β-cell mass. The model reproduces the Foster
-antagonism and resolves it into a **sequencing rule** — give antigen-specific tolerance *first*,
-let the Treg pool self-stabilize, *then* dose anti-CD3 — with a quantitative, falsifiable prediction
-about the optimal inter-drug interval.
+## What this is
+A within-host model of the type 1 diabetes immune attack that grew, layer by layer, to answer a
+connected set of immunotherapy questions — each grounded in the literature, machine-checked, and
+honestly bounded. It now reproduces or predicts **three independent real-world datasets** (Foster 2025,
+Mathieu 2023, and the teplizumab response biomarkers) and one documented drug side effect
+(checkpoint-induced T1D). The arc:
 
-## What's here
+---
 
+## ★ The capstone — read this first
+**[SYNTHESIS.md](SYNTHESIS.md)** — the one thesis all six layers converged on, the full **intervention map**
+(which pairings backfire, which are safe, which need a partner), the **patient-response axes**, the
+consolidated **testable predictions**, and an honest tier of what's backed by how much. Read that for
+*what the whole body says*; read on for the per-layer tour.
+
+---
+
+## Results — each in its own FINDINGS doc
+
+### 1 · Combination — which immunotherapy pairings backfire, and how to schedule them
+→ [FINDINGS_clonal.md](analysis/FINDINGS_clonal.md) · [FINDINGS_avidity.md](analysis/FINDINGS_avidity.md) · code `t1d_clonal.py`, checked by `verify_clonal.py` (**7/7, seed-robust**)
+- Population/bistable models predict **synergy** and *structurally cannot* reproduce the Foster 2025
+  antagonism; **avidity** resolution doesn't rescue it either → the antagonism is **sub-continuum**.
+- A **discrete-clonal/stochastic** model *does* reproduce it: a **co-dosing antagonism** (anti-CD3
+  stochastically extinguishes the just-activated converting clones), which **sequencing avoids**.
+- A **platform axis** reconciles *both* real datasets: **conversion-type** platforms (mRNA; Foster)
+  antagonize when co-dosed; **expansion-type** (IL-10; the Mathieu 2023 human AG019+teplizumab trial)
+  are safe. The model lands every known combination study where it actually fell.
+- **Payload** (`t1d_clonal_schedule.py`): a **regime map** (which combos backfire) + a **schedule rule**
+  (separate conversion-type drugs by ~4–6 months; tolerance-first is the more robust order).
+
+### 2 · Teplizumab responder vs non-responder
+→ [FINDINGS_responder.md](analysis/FINDINGS_responder.md) · code `t1d_responder.py`
+- A **durable-exhaustion vs TSCM-renewal balance** reproduces the ~50% response split **and both real
+  biomarkers**: baseline exhausted-CD8 → responder (Wiedeman 2019); high TSCM → non-responder (Dufort 2026).
+- **Actionable:** predicted non-responders are *converted* by a 2nd course or by targeting TSCM —
+  and the model correctly flags that **rapamycin would backfire** (it breaks the exhaustion; Baeyens 2009).
+
+### 3 · The exhaustion hierarchy (vertical deepening)
+→ [FINDINGS_hierarchy.md](analysis/FINDINGS_hierarchy.md) · code `t1d_hierarchy.py`
+- Explicit **progenitor (TCF1) → effector → terminally-exhausted (TOX)** ladder. The **progenitor pool**
+  is the responder axis — a *measurable* population (Vignali 2018).
+- **Predicts checkpoint-inhibitor-induced T1D** — a documented clinical fact (built-in validation).
+- **Transfer:** the *same* ladder run with the *opposite* sign is the cancer/HIV model.
+
+### 4 · The β-cell as an active participant (vertical deepening)
+→ [FINDINGS_betacell.md](analysis/FINDINGS_betacell.md) · code `t1d_betacell.py`
+- A **stress → HLA/neoantigen feedback loop** makes the disease self-amplifying.
+- **β-protection** (verapamil-type) works *orthogonally* and combines with immunotherapy as a **safe,
+  antagonism-free axis** — a new combination prediction. *(Honest non-result: the β-fragility
+  lever-switch did **not** emerge; reported as-is.)*
+
+---
+
+## Integrity infrastructure
+- **`verify_claims*.py`, `verify_clonal.py`** — machine-checkable re-derivation of headline numbers (exit 0 ⇔ pass).
+- **[AUDIT.md](analysis/AUDIT.md)** — adversarial audits, including the public reversal post-mortem.
+- **[ASSUMPTIONS_AUDIT.md](analysis/ASSUMPTIONS_AUDIT.md)** — two cycles of self-directed assumption audits + literature checks.
+- **`assumptions.json` + `validate.py`** — a **standing assumption registry + validator**: catalogs every
+  assumption (status / controversy / evidence / the parameters it governs), prints a *dig-here* queue of
+  load-bearing-but-unsettled assumptions, and **surfaces blind spots** (model parameters with no
+  catalogued assumption). It prints its own limit: it cannot see conceptual-frame unknown-unknowns.
+  ```bash
+  cd analysis && python3 validate.py          # dashboard + dig-here queue + blind-spot surfacer
+  python3 validate.py --run                   # also re-execute the verify_*.py scripts (4 GB cap)
+  ```
+
+## Map of the repo
 ```
 type1-diabetes-research/
-├── README.md                     ← this file
-├── ABSTRACT.md                   ← citable one-page summary
+├── README.md                       ← this overview
 └── analysis/
-    ├── t1d_model.py              ← P1: the core 3-state within-host ODE + interventions + arms
-    ├── t1d_experiments.py        ← P2: mechanism/cohort/gap-sweep/robustness; writes the .png + .npz
-    ├── t1d_calibration.py        ← P3: stage-2 cohort calibrated to TN10 / TrialNet progression
-    ├── t1d_analytic.py           ← P-analytic: DERIVED closed-form criterion (antagonism factor + ρ=1 inversion law) that replicates the ODE
-    ├── verify_claims.py          ← machine-checkable re-derivation of every headline number (24/24)
-    ├── FINDINGS.md               ← the verified results + exact numbers
-    ├── MEMO.md                   ← the literature lane, citations, calibration anchors
-    ├── METHODS.md                ← consolidated methods (equations, parameters, numerics)
-    ├── NOVELTY.md                ← prior-art / novelty assessment
-    ├── scan_results.md           ← 126-paper Semantic Scholar scan (12 topics, 2026-06-21)
-    ├── t1d_mechanism.png         ← why order matters: only tolerance-first builds & keeps R
-    ├── t1d_cohort.png            ← durable-control fraction by arm (the antagonism bar chart)
-    ├── t1d_gap.png               ← the falsifiable prediction: cure fraction vs inter-drug interval
-    ├── t1d_calibration.png       ← untreated stage-2 progression vs TN10 placebo (~2 yr median)
-    ├── t1d_analytic.png          ← derived order-inversion law (A^ρ−A) vs ODE benefit, crossing 0 at ρ*=1
-    ├── t1d_results.npz           ← cached numeric outputs of the experiment sweeps
-    └── raw_cache.json            ← raw Semantic Scholar API payload backing scan_results.md
+    ├── t1d_clonal.py               ← discrete-clonal/stochastic model (Foster + platform axis)
+    ├── t1d_clonal_{schedule,robust,calib}.py  ← regime map + schedule rule / robustness / calibration
+    ├── t1d_avidity.py              ← avidity-continuum model (the sub-continuum negative result)
+    ├── t1d_responder.py            ← teplizumab responder/non-responder
+    ├── t1d_hierarchy.py            ← progenitor→effector→exhausted ladder (+ checkpoint-T1D)
+    ├── t1d_betacell.py             ← the β-cell as active participant (stress feedback)
+    ├── t1d_model.py + _v2/_v3/_v4  ← the original (withdrawn v1) toggle + verified-biology rebuilds
+    ├── FINDINGS_{final,clonal,avidity,responder,hierarchy,betacell}.md  ← the results, one per layer
+    ├── FINDINGS.md                 ← the original v1 result (SUPERSEDED, kept as the record)
+    ├── verify_*.py / verify_clonal.py  ← machine-checks
+    ├── AUDIT.md / ASSUMPTIONS_AUDIT.md  ← audits
+    ├── assumptions.json / validate.py   ← the standing assumption registry + validator
+    └── MEMO.md / METHODS.md / NOVELTY.md / scan_results.md  ← literature lane
+        (Semantic-Scholar scans for each step live one level up in ../_scan/*.md)
 ```
-
-## Key results
-
-All numbers below are re-derived and asserted by [`verify_claims.py`](analysis/verify_claims.py)
-(24/24 PASS); see [FINDINGS.md](analysis/FINDINGS.md) for the full statement.
-
-**The model is bistable.** Two stable basins: autoimmune (effectors high → β-cell mass → 0.002) and
-tolerant (Tregs high → β-cell mass → 0.931). Late stage 2 sits in the autoimmune basin.
-
-**The mechanism reproduces Foster and resolves it into a sequencing rule.** Cohort durable-control
-fraction (β-cell mass > 0.45 at 5 yr, across a severity gradient):
-
-| arm | durable control |
-|---|---|
-| untreated | 0% |
-| anti-CD3 monotherapy | 0% (delays only) |
-| antigen-specific tolerance monotherapy | **100%** |
-| simultaneous (both at once) | **59%** — anti-CD3 antagonizes tolerance (−41 pts) |
-| anti-CD3 → tolerance (anti-CD3 first) | **41%** — worst (substrate deleted first) |
-| tolerance → anti-CD3 (tolerance first) | **100%** — fully protected |
-
-The ordering `tol-first ≥ tol-only > simultaneous > anti-CD3-first` is the mechanism's signature.
-
-**The falsifiable prediction — an optimal inter-drug interval.** In the gap sweep
-([`t1d_gap.png`](analysis/t1d_gap.png)), tolerance-first is flat at ~97–100% for any gap, while
-anti-CD3-first recovers monotonically with the gap (59% at 0 → 100% at 1.5 yr): if anti-CD3 must
-precede, you have to wait for the effector pool to recover before giving tolerance. Simultaneous
-dosing is the worst protocol.
-
-**Robustness — and a two-channel caveat.** Over a 5-parameter grid: in the Treg-sparing regime
-(`rho<1`, matching teplizumab's documented Treg-sparing/expanding profile) tolerance-first ≥
-simultaneous in **171/171 (100%) viable sets, never negative** (strictly better in 26; the rest
-saturate). Including strongly Treg-depleting anti-CD3 (`rho≤1.1`), the optimal order **can invert**
-(17/228 sets, all at the highest `rho`) — there are two antagonism channels, substrate-depletion
-(favors tolerance-first) and Treg-destruction (favors anti-CD3-first), and which dominates is set by
-how Treg-depleting anti-CD3 is. This yields a **second falsifiable prediction**: if anti-CD3 is
-strongly Treg-depleting in vivo, the optimal order flips.
-
-**Calibration.** A stage-2 cohort heterogeneous in effector severity and residual β-cell mass
-reproduces the untreated progression curve: median time-to-diagnosis **2.06 yr** (TN10 placebo ~2.0
-yr), **~45% progressed by 2 yr** (TrialNet stage-2 ~50%). The sequencing antagonism persists on this
-clinically-anchored cohort (tol-only 100% → simultaneous 65% → anti-CD3-first 35% → tol-first 97%).
-
-## Verifying the claim chain
-
-Every headline number above is re-derived from the model modules and asserted within tolerance:
-
-```bash
-cd analysis && python3 verify_claims.py
-```
-
-This prints each check and exits 0 only if all pass (**24/24 PASS**). A regression in any module
-trips a FAIL. The checks cover bistability, untreated ~2-yr progression, anti-CD3 delay-only
-behavior, the cohort antagonism + sequencing fractions, the gap-sweep direction, the Treg-sparing
-robustness invariant, and the high-`rho` order-inversion caveat.
 
 ## Running it
-
 ```bash
-pip install -r requirements.txt        # numpy, scipy, matplotlib
-
+pip install -r requirements.txt           # numpy, scipy, (matplotlib for the v1 figures)
 cd analysis
-python3 t1d_model.py                    # single-patient + cohort table (P1)
-python3 t1d_experiments.py              # figures + t1d_results.npz (P2)
-python3 t1d_calibration.py             # calibration table + figure (P3)
-python3 verify_claims.py                # re-derive & assert every headline number
+# every model runs under a 4 GB cap per project policy, e.g.:
+bash -c 'ulimit -v 4194304; timeout 595 python3 t1d_clonal.py'
+python3 t1d_responder.py    # deterministic, fast
+python3 t1d_hierarchy.py
+python3 t1d_betacell.py
+python3 verify_clonal.py    # machine-check the clonal antagonism (7/7)
+python3 validate.py         # the standing assumption audit
 ```
 
-Rebuilding the literature corpus ([scan_results.md](analysis/scan_results.md) /
-[raw_cache.json](analysis/raw_cache.json)) is optional and requires a Semantic Scholar API key; the
-scan driver lives one level above the project at `../_scan/scan_all.py`:
-
-```bash
-S2_API_KEY=... python3 ../_scan/scan_all.py
-```
-
-## Provenance & caveats
-
-This work was produced in a single interactive modeling session (2026-06) and is **illustrative**.
-Parameters are illustrative beyond the one calibrated anchor (untreated stage-2 progression timing),
-and the bistable switch makes outcomes binary per patient, so results are framed as cohort fractions.
-Two honest limitations carry from [FINDINGS.md](analysis/FINDINGS.md): (1) the model **under-produces
-the teplizumab monotherapy delay magnitude** (+0.68 yr here vs TN10's ~+2 yr) — a single short
-anti-CD3 course only transiently debulks effectors, so the robust contribution is the *sequencing
-antagonism*, not the monotherapy-delay magnitude; and (2) the antagonism is visible only in the
-marginal-efficacy regime and is neutral where tolerance is overwhelmingly effective. The originating
-observation (Foster 2025) is itself a conference abstract. See [MEMO.md](analysis/MEMO.md) for the
-literature lane and [NOVELTY.md](analysis/NOVELTY.md) for the prior-art reconciliation.
+## Honest caveats
+Illustrative throughout — magnitudes are illustrative; the robust outputs are *directions and
+structural results*, not numbers. The qualitative claims are anchored to real data (Foster 2025,
+Mathieu 2023, the response biomarkers, checkpoint-induced T1D), but **none is a validated clinical
+result**, and one prior headline was already wrong and withdrawn. Open gaps are tracked live in the
+`validate.py` dig-here queue (currently: the bistable-switch structural assumption; the conversion
+"window" whose literature is unconfirmed; the β-protection+immunotherapy combination, model-predicted
+not confirmed). The detailed per-result caveats live in each `FINDINGS_*.md`. Originating observations
+include conference abstracts (Foster 2025; Dufort 2026).
