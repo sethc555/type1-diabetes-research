@@ -26,10 +26,12 @@ Mathieu 2023, and the teplizumab response biomarkers) and one documented drug si
 ---
 
 ## ★ The capstone — read this first
-**[SYNTHESIS.md](SYNTHESIS.md)** — the one thesis all six layers converged on, the full **intervention map**
+**[SYNTHESIS.md](SYNTHESIS.md)** — the one thesis all the layers converged on, the full **intervention map**
 (which pairings backfire, which are safe, which need a partner), the **patient-response axes**, the
 consolidated **testable predictions**, and an honest tier of what's backed by how much. Read that for
-*what the whole body says*; read on for the per-layer tour.
+*what the whole body says*. **[CALIBRATION.md](CALIBRATION.md)** — how the load-bearing knobs were *fit to
+trial data* (TN10, TEDDY/Ziegler, Shields/PROTECT, Pescovitz), the two-clock structure, and the
+cross-validations. Then read on for the per-layer tour.
 
 ---
 
