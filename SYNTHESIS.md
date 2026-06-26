@@ -73,6 +73,9 @@ Every modality, its axis, how it fails *alone*, and what rescues it:
 
 The map *is* the actionable output: it says which pairs backfire (co-dosed anti-CD3 + mRNA tolerance),
 which are safe (anti-CD3 + IL-10 tolerance; anything + β-protection), and which need a partner (anti-CD20).
+**It is now runnable** — `analysis/trial_triage.py` takes a proposed design (modality / stage / sequence /
+population) → verdict + failure mode + fix + a confidence tag (honoring the validation boundary), and
+reproduces the body's call on every real trial above (`verify_trial_triage.py`, 14/14).
 
 ---
 
