@@ -37,6 +37,27 @@ fractional, same ballpark). A prediction, not a fit.
 parallel decline (Pescovitz 2014) — so it must be paired with a durable agent. And the Pescovitz-fit
 `Tdom`≈0.18 independently matches the bcell layer's illustrative 0.20.
 
+## Out-of-sample validation — the decision-grade boundary (leave-one-trial-out)
+Calibration *fits* the model to trials; validation asks whether it *predicts* trials it was never fit to.
+For each held-out endpoint, the model predicts it from parameters calibrated only on the others
+(`loo_validation.py`, `verify_loo.py` 5/5):
+
+| held-out endpoint | predicted | observed | error |
+|---|---|---|---|
+| post-dx C-peptide half-life (Shields) | 1.16 yr | 1.10 yr | **6%** |
+| Ziegler multi-Ab → T1D @10yr | 0.69 | 0.70 | **2%** |
+| Ziegler multi-Ab → T1D @15yr | 0.82 | 0.84 | **2%** |
+| PROTECT C-peptide preservation | 0.10 | 0.16 | 39% |
+| TN10 teplizumab median | 112 mo | 48 mo | 132% |
+
+**The boundary, measured:** the model's **natural-history RATE predictions validate out-of-sample to ~2%**
+— it predicts the C-peptide decline and the autoantibody-progression curves of trials it was *never fit to*.
+That is the strongest "more than knobs" evidence here: free knobs can fit, but they cannot *predict held-out
+data*. But the model's **cross-stage DRUG-EFFECT extrapolations fail** (39–132%): the anti-CD3 effect is not
+the same in stage 2 vs stage 3. So the honest verdict is **quantitative for natural history; a per-stage tool
+(not an extrapolator) for therapy** — a useful negative result that tells you *exactly* how far to trust a
+recommendation.
+
 ## Identifiability — what the data pins vs what it can't (honest)
 - **Pinned:** the disease *timescale(s)*, the spreading *rate*, the C-peptide *decline rate*, the anti-CD20
   *transience window* — and the cross-dataset *consistency* of the late rate.
