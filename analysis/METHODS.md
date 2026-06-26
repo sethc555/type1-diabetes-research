@@ -73,6 +73,9 @@ history; a per-stage tool, not an extrapolator, for therapy* — a measured trus
 the **enrichment** from stratifying teplizumab on it: ~56% (unselected) → ~91% (exhaustion-high) / ~25%
 (exhaustion-low). The rate (~50%, AbATE) and direction (Long 2016/Wiedeman 2019) are reproduced; the
 enrichment *magnitude* is the forward, re-analysis-testable bet (`verify_responder_classifier.py`).
+`trial_triage.py` packages the whole intervention map into a query: a proposed design (modality, stage,
+sequence, population) → verdict + failure mode + fix + a confidence tag honoring the OOS boundary; it
+reproduces the body's call on every real trial (`verify_trial_triage.py`, 14/14).
 
 ## 7. Verification and the assumption registry
 **19 `verify_*.py` scripts** re-derive and assert every headline number; `validate.py --run` executes them
