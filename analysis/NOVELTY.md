@@ -5,7 +5,31 @@
 > [scan_results.md](scan_results.md) (126 papers, 12 topics, 2026-06-21) and reconciled in
 > [MEMO.md](MEMO.md). It claims novelty of *approach and hypothesis*, not of clinical validation.
 
-## What is novel here
+## Novelty of the corrected body (the multi-layer model)
+The detailed assessment further down was written for the **withdrawn** v1 *sequencing-antagonism* claim; the
+combination layer's headline has since changed (to a *platform-dependent, sub-continuum* antagonism — see
+[FINDINGS_clonal.md](FINDINGS_clonal.md)), and the work grew into a calibrated, trial-validated multi-layer
+body. Honestly: **the individual mechanisms are established biology** — none is discovered here. The novelty
+is the **integration, the method, and the validated predictions**:
+
+| # | Novel piece | Why it is new |
+|---|---|---|
+| 1 | **The method as a reusable contribution** — reproduce an *unexplained published* result → smallest model → falsifiable prediction → *adversarial audit with open retraction* → *machine-verify every number*. | Most T1D modeling is statistical/ML; mechanistic models rarely adversarially audit + machine-verify + publicly retract. The disciplined pipeline + its self-auditing assumption registry/validator is the transferable contribution. |
+| 2 | **One framework that reconciles contradictory trials and explains failures.** | The *same* model reconciles Foster 2025 (antagonism) and Mathieu 2023 (safe) via a platform axis, and *explains why* anti-IL-1 (Moran 2013), single-antigen tolerance, and anti-CD20 (Pescovitz) failed — timing/escape/transience, not bad luck. No prior model spans these. |
+| 3 | **A calibrated, out-of-sample-validated within-host T1D model.** | Calibrated to four trials, it predicts the *natural history* of held-out trials to ~2% (and honestly bounds cross-stage therapy as un-extrapolable). A T1D within-host model that survives leave-one-trial-out is, in the surveyed corpus, new. |
+| 4 | **A re-analysis-testable stratification prediction** — baseline-exhaustion score → teplizumab enrichment ~56%→~91%/~25%, checkable on *existing* trial data. | Turns the model into a decision a network could act on, not a description. |
+| — | **A knob-independent structural negative** — the avidity continuum *cannot* reproduce Foster's antagonism (only discrete-clonal can). | A constraint on the mechanism class that holds regardless of parameter tuning. |
+
+Cross-layer transfers (the exhaustion sign-flip to cancer/HIV; the β-cell-stress hub shared across the
+spreading/metabolic/innate layers) are reasoning patterns, not new biology, and are presented as such.
+
+---
+
+> The assessment below is the original **v1 (sequencing)** novelty + the prior-art sweeps, retained as the
+> record. Its prior-art landscape — *no mechanistic within-host model of the anti-CD3 × antigen-specific-
+> tolerance combination* — still frames the combination layer (`t1d_clonal.py`).
+
+## What is novel here (v1 — combination layer, retained as record)
 
 | # | Novel piece | Why it is new |
 |---|---|---|
