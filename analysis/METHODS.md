@@ -1,175 +1,93 @@
 # Methods
 
 > **Status — illustrative within-host modeling / hypothesis generation, NOT clinical findings.**
-> Consolidated methods for the model in [`t1d_model.py`](t1d_model.py), the experiments in
-> [`t1d_experiments.py`](t1d_experiments.py), and the calibration in
-> [`t1d_calibration.py`](t1d_calibration.py). Results: [FINDINGS.md](FINDINGS.md). Literature lane
-> and calibration anchors: [MEMO.md](MEMO.md).
+> This documents the *current* multi-layer body. Each model's exact equations live in its own file's
+> `rhs()` (the source of truth) and are described in the matching `FINDINGS_*.md`; this file gives the
+> shared methodology, the model inventory, the numerics, and the calibration/validation/verification
+> protocols. The original (withdrawn) v1 3-state model is documented separately in §8.
 
-## 1. Model
+## 1. Modeling approach
+Each layer is the **smallest within-host dynamical model** that reproduces a specific *unexplained,
+published* result, then is pushed to a falsifiable prediction, adversarially audited, and machine-verified
+(the cluster method, `../../METHOD.md`). Models are deterministic ODEs (`scipy.integrate.solve_ivp`) except
+the combination layer, which is discrete-clonal/stochastic (tau-leaping) because the Foster antagonism is a
+*sub-continuum* effect. Recurring motifs: an effector↔Treg / effector self-activation **n-Hill switch**; a
+**β-cell-stress feedback loop** (stress → HLA/neoantigen → amplified attack); a durable-but-waning
+**exhaustion imprint** (anti-CD3); and **threshold-gated** processes (spreading, ignition). Time is in
+**years**; β-cell mass `B`∈[0,1] (∝ C-peptide). Every model runs under a hard **4 GB cap**
+(`ulimit -v 4194304; timeout 595`).
 
-A 3-state within-host ODE. State (time in **years**): β-cell mass `B` (fraction of healthy, ~
-proportional to C-peptide, 0..1); autoreactive effector burden `E` (a.u.); antigen-specific Treg
-burden `R` (a.u.). The effector and Treg pools form a **mutual-repression bistable switch** (each
-self-promotes via a Hill term of order `n=2`, each represses the other — the standard motif for
-immune cell-fate decisions). β-cell mass grows logistically and is killed in proportion to effector
-burden.
+## 2. Model inventory
+Each model is a standalone `t1d_*.py` with a `main()` that prints its predictions and a `verify_*.py` that
+asserts them (exit 0 ⇔ pass). Equations: see each file's `rhs()`; results + caveats: the `FINDINGS_*.md`.
 
-### Equations (n = 2 Hill)
+| model | captures | reproduces (real anchor) | verify |
+|---|---|---|---|
+| `t1d_clonal.py` | discrete-clonal/stochastic combination + platform axis | Foster 2025 antagonism; Mathieu 2023 safety | `verify_clonal.py` 7/7 |
+| `t1d_avidity.py` | avidity-resolved continuum (the structural negative) | Foster antagonism is **sub-continuum** | `verify_avidity.py` 2/2 |
+| `t1d_responder.py` | teplizumab responder = exhaustion-vs-TSCM balance | Wiedeman 2019 + Dufort 2026 biomarkers | `verify_responder.py` 6/6 |
+| `t1d_hierarchy.py` | progenitor→effector→exhausted ladder | checkpoint-inhibitor-induced T1D | `verify_hierarchy.py` 6/6 |
+| `t1d_betacell.py` | β-cell stress feedback; β-protection axis | self-amplifying loop; safe combination | `verify_betacell.py` 4/4 |
+| `t1d_spreading.py` | primary antigen + stress-driven spreading | why single-antigen tolerance is escaped | `verify_spreading.py` 7/7 |
+| `t1d_bcell.py` | B cells as APCs; anti-CD20 + repopulation | Pescovitz 2014 transience; Linsley 2018 axis | `verify_bcell.py` 6/6 |
+| `t1d_metabolic.py` | C-peptide + glucose readout; glucotoxicity | Mortensen 2009 honeymoon; McVean 2023 | `verify_metabolic.py` 7/7 |
+| `t1d_innate.py` | innate trigger primes the adaptive attack | Moran 2013 anti-IL-1 failure (timing) | `verify_innate.py` 7/7 |
+| `t1d_genetics.py` | genotype→parameter map (calibration bridge) | Erlich 2008 / Sharp 2019 / Bauer 2019 | `verify_genetics.py` 4/4 |
 
-```
-dE/dt = bE + VE * E^n/(K^n+E^n) / (1+(R/Ki)^n)  - dE*E - u_a3(t)*E - u_tol(t)*E
-dR/dt = bR + VR * R^n/(K^n+R^n) / (1+(E/Ki)^n)  - dR*R + phi*u_tol(t)*E - rho*u_a3(t)*R
-dB/dt = rhoB * B*(1-B) - kappa * E * B
-```
+Helper/robustness scripts (`t1d_clonal_{calib,robust,schedule}.py`, `t1d_switch_robust.py`) explore the
+clonal regime/robustness; their claims fold into `verify_clonal.py` and the FINDINGS.
 
-`u_a3(t)` and `u_tol(t)` are the time-dependent intervention rates (square pulses; see §3). The
-switch is biased toward autoimmunity because `VR < VE`. There are two stable basins:
+## 3. Numerics
+`solve_ivp`, method **LSODA**, `rtol=1e-8`, `atol=1e-10`, bounded `max_step` (≈0.01–0.02 yr); states floored
+at 0 in the RHS; intervention courses are square pulses (anti-CD3 ~14 d, tolerance ~30 d, β-protection
+sustained). Deterministic models give exact, reproducible numbers (verify asserts values, not just
+direction). The clonal model uses Poisson tau-leaping and is checked for **seed-robustness**. Outcomes:
+β-mass / C-peptide at a horizon; cohort fractions where a switch makes per-patient outcomes binary;
+median time-to-clinical for progression curves.
 
-- **autoimmune** (E high, R low → β-cells killed): in [`verify_claims.py`](verify_claims.py), from
-  IC `[0.60, 1.10, 0.12]` over 20 yr, `B → 0.002`;
-- **tolerant** (E low, R high → β-cells preserved): from IC `[0.60, 0.10, 1.20]`, `B → 0.931`.
+## 4. Calibration (fit to trial summary data)
+Load-bearing, outcome-determining parameters are fit to **published summary statistics** (not
+individual-level data). Four calibrations (`calib_*.py`, each machine-checked):
 
-Late stage 2 sits in the autoimmune basin. The two interventions, **same total drug, different
-order**: antigen-specific tolerance *converts* effectors to Tregs (flux `phi*u_tol*E` from `E` into
-`R`; it needs effectors present to convert); anti-CD3 is lymphodepleting — it removes effectors
-(`u_a3*E`) but also depletes Tregs (`rho*u_a3*R`), so by itself it only transiently debulks `E` and
-the switch reverts.
-
-## 2. Parameters
-
-Operating point (the `P` dict in [`t1d_model.py`](t1d_model.py)). Illustrative; the antagonism is
-robust over a region (§6).
-
-| param | value | meaning |
+| parameter | anchor | fit |
 |---|---|---|
-| `bE` | 0.08 | baseline effector influx |
-| `VE` | 1.80 | effector self-activation max rate |
-| `K` | 0.50 | half-saturation of self-activation |
-| `Ki` | 0.50 | cross-repression half-saturation |
-| `dE` | 0.80 | effector loss (1/yr) |
-| `bR` | 0.04 | baseline Treg influx |
-| `VR` | 1.40 | Treg self-activation max rate (< `VE`: switch biased toward autoimmunity) |
-| `dR` | 0.50 | Treg loss (1/yr) |
-| `phi` | 0.40 | tolerance conversion efficiency (fraction of removed E that becomes R) |
-| `rho` | 0.90 | anti-CD3 Treg-depletion factor (relative to its effector-depletion rate) |
-| `rhoB` | 0.60 | β-cell logistic regeneration rate (1/yr) |
-| `kappa` | 0.40 | per-effector β-cell kill rate |
-| `n` (`N_HILL`) | 2 | Hill coefficient |
+| disease timescale `kappa` | TN10 placebo median 24.4 mo (Herold 2019); teplizumab 48.4 mo | 0.60/yr; anti-CD3 effect 24% |
+| spreading rate | Ziegler 2013 / TEDDY (44/70/84%; single-Ab 14.5%) | 0.04/yr; multi-Ab hazard 0.12/yr |
+| C-peptide decline | Shields 2018 (47%/yr, t½ 1.10 yr) | 0.63/yr |
+| anti-CD20 transience | Pescovitz 2009/2014 (69%@12mo; 8.2-mo shift) | r_bc 4.7/yr, Tdom 0.18 |
 
-Intervention strengths / durations (effective per-year rates during a short clinical course):
+Calibration reveals a **two-clock accelerating disease** (pre-clinical ~0.12/yr → final ~0.6/yr) and two
+**cross-validations** (the ~0.6/yr late rate from TN10 *and* the C-peptide decline, agreeing within 6%; the
+anti-CD3 effect transferring TN10→PROTECT). **Identifiability is reported honestly**: the timescale is
+pinned, but `kappa`-vs-effector-burden is not (the median fixes their product); see `CALIBRATION.md`.
 
-| const | value | meaning |
-|---|---|---|
-| `A3_RATE` | 18.0 (1/yr) | anti-CD3 effector-depletion rate while dosing |
-| `A3_DUR` | 14/365 yr | anti-CD3 course length ~14 days (TN10 single course) |
-| `TOL_RATE` | 12.0 (1/yr) | antigen-specific tolerance conversion rate while dosing |
-| `TOL_DUR` | 30/365 yr | tolerance course length ~30 days |
-| `B_DX` | 0.30 | stage-3 diagnosis threshold (fraction of healthy β-cell mass) |
-| `B_CURE` | 0.45 | "durable control" threshold at the evaluation horizon |
-| `HORIZON` | 5.0 yr | evaluation horizon |
+## 5. Out-of-sample validation (leave-one-trial-out)
+`loo_validation.py` predicts each held-out trial endpoint from parameters calibrated only on the others.
+**Natural-history RATE predictions validate to ~2%** (e.g. the C-peptide half-life predicted from the TN10
+progression rate; Ziegler 15-yr from the 5-yr point). **Cross-stage DRUG-EFFECT extrapolation fails**
+(39–132%): the anti-CD3 effect differs between stage 2 and stage 3. Verdict: *quantitative for natural
+history; a per-stage tool, not an extrapolator, for therapy* — a measured trust boundary (`verify_loo.py`).
 
-## 3. Intervention schedules (arms)
+## 6. Decision-relevant output
+`responder_classifier.py` formalizes the responder mechanism into a baseline-exhaustion score and predicts
+the **enrichment** from stratifying teplizumab on it: ~56% (unselected) → ~91% (exhaustion-high) / ~25%
+(exhaustion-low). The rate (~50%, AbATE) and direction (Long 2016/Wiedeman 2019) are reproduced; the
+enrichment *magnitude* is the forward, re-analysis-testable bet (`verify_responder_classifier.py`).
 
-All arms deliver the **same total drug**; only order/overlap differs (`arms(gap)` in
-[`t1d_model.py`](t1d_model.py)). `gap` is the inter-drug interval (years) for the two sequential
-arms. Each agent is a square pulse of its rate over its duration starting at the scheduled time.
+## 7. Verification and the assumption registry
+**19 `verify_*.py` scripts** re-derive and assert every headline number; `validate.py --run` executes them
+all under the cap. **`assumptions.json` + `validate.py`** are a standing registry: every assumption is
+tagged (role/status/controversy/evidence/governed-parameters); the validator prints a dashboard, a
+*dig-here* queue (load-bearing-but-unsettled), and a **blind-spot surfacer** (model parameters with no
+catalogued assumption — and it flags, not silently skips, any model it cannot parse). It prints its own
+limit: it cannot see conceptual-frame unknown-unknowns. Audits and retractions: `AUDIT.md`,
+`ASSUMPTIONS_AUDIT.md`.
 
-| arm | anti-CD3 start | tolerance start |
-|---|---|---|
-| untreated | — | — |
-| anti-CD3 only | 0.0 | — |
-| tolerance only | — | 0.0 |
-| simultaneous | 0.0 | 0.0 |
-| anti-CD3 → tol | 0.0 | `gap` (default 0.25 yr) |
-| tol → anti-CD3 | `gap` | 0.0 |
-
-## 4. Cohort / severity sampling
-
-The per-patient severity knob is the baseline effector burden `E0` in the late-stage-2 initial
-condition `stage2_ic(E0) = [0.60, E0, 0.12]` (β-cell mass partly reduced, effectors winning, Tregs
-low). Higher `E0` = sicker.
-
-- **Cohort durable-control fraction** (`cure_fraction`, P1/P2): severity gradient
-  `E0 ∈ linspace(0.70, 1.50, 17)`; fraction with banked β-cell mass > `B_CURE` at `HORIZON`.
-- **Calibration cohort** (P3, [`t1d_calibration.py`](t1d_calibration.py)): n = 500, seeded;
-  heterogeneous in *both* effector severity and residual β-cell mass —
-  `E0 ~ Normal(1.05, 0.22)` clipped to [0.72, 1.7] and `B0 ~ Normal(0.52, 0.12)` clipped to
-  [0.33, 0.85], with Tregs fixed at 0.12. Spread chosen so the untreated median time-to-diagnosis
-  ~2 yr and ~half progress by ~2 yr (a broad, TrialNet-like curve).
-
-## 5. Outcome metrics
-
-- **`time_to_dx`** — first time `B` crosses below `B_DX` (0.30), linearly interpolated between
-  solver samples; `inf` if never crossed.
-- **`banked_mass`** — `B` interpolated at the horizon (5 yr).
-- **`cure_fraction`** — fraction of the severity cohort with `banked_mass > B_CURE` (0.45) at the
-  horizon (durable control). Because the switch is bistable, per-patient outcomes are binary, so
-  results are reported as cohort fractions and the antagonism is visible in the marginal-efficacy
-  regime.
-- **Kaplan-Meier-style progression** (P3) — fraction not yet diagnosed (`B > B_DX`) vs time;
-  median read off the survival curve.
-
-## 6. Numerics and robustness-sweep design
-
-**Integration.** `scipy.integrate.solve_ivp`, method **LSODA**, `rtol=1e-8`, `atol=1e-10`,
-`max_step=0.012`; default `t_end = 8.0` yr, 2500 evaluation points. States are floored at 0 inside
-the RHS. The system is deterministic (no stochastic component), so verification checks assert actual
-values, not just direction.
-
-**Robustness sweep** (`robustness_sweep` in [`t1d_experiments.py`](t1d_experiments.py)). A
-5-parameter grid: `phi ∈ {0.30, 0.40, 0.50}`, `rho ∈ {0.5, 0.7, 0.9, 1.1}`,
-`VR ∈ {1.3, 1.4, 1.5}`, `Ki ∈ {0.45, 0.50, 0.55}`, `kappa ∈ {0.36, 0.40, 0.44}`. A parameter set is
-**viable** only if untreated cure fraction ≤ 0.2 *and* tolerance-only ≥ 0.3 (i.e. the regime is
-disease-progressing and tolerance-responsive). For each viable set we record
-`delta = cure(tol→anti-CD3) − cure(simultaneous)`. The default run restricts to the **Treg-sparing
-regime** `rho < 1` (matching teplizumab's documented Treg-sparing/expanding profile); passing
-`rho_max=1.1` includes strongly Treg-depleting anti-CD3, where the optimal order can invert (the
-two-channel caveat). [`verify_claims.py`](verify_claims.py) asserts the qualitative invariant — no
-order-inversion in the Treg-sparing regime — on a reduced 2-level grid for speed, plus a single
-high-`rho` point demonstrating inversion.
-
-## 7. Calibration anchors (from [MEMO.md](MEMO.md))
-
-- **TN10 teplizumab (stage 2):** single 14-day course; placebo median to diagnosis ~24–27 months,
-  teplizumab ~48–50 months → ~2-year median delay (Mathieu 2025; Zaitoon 2025; Gitelman 2026
-  TEPLI-REAL).
-- **TrialNet staging consensus (Phillip 2024):** stage 2 carries high near-term risk — roughly half
-  progress to stage 3 within ~2 years; ~11%/yr baseline.
-- **Metabolic inflection (Montaser 2026):** accelerated β-cell decline begins ~1–2 yr before
-  diagnosis.
-- **β-cell decline backbone (Carr 2026):** Oral Minimal Model φtotal trajectories aligned to S1→S2.
-- **Treg-induction kinetics (Cabello-Kindelan 2019; Serr 2016):** parameterize the tolerance
-  conversion term.
-- **Combination antagonism to reproduce (Foster 2025, "2136-LB"):** anti-CD3 reduces
-  antigen-specific-immunotherapy efficacy in NOD incidence curves.
-
-## 8. Derived criterion (P-analytic — `t1d_analytic.py`)
-
-The intervention courses (~2–4 weeks) are near-impulsive relative to the year-scale switch, so in
-the impulsive limit each integrates **exactly** to a linear map on `(E, R)` (the slow baseline /
-self-activation / decay terms contribute `O(rate·τ) ≈ 0.04–0.07` over a course and are dropped):
-
-```
-T = exp(-sigma_tol * tau_tol) = 0.373      A = exp(-sigma_a3 * tau_a3) = 0.501
-tolerance:  E -> T*E ,        R -> R + phi*(1-T)*E          (convert effectors to Tregs)
-anti-CD3:   E -> A*E ,        R -> A**rho * R               (delete effectors; deplete Tregs)
-```
-
-For **simultaneous** co-administration the two act on the same decaying effector pool, integrated in
-two phases (both over `[0, tau_a3]`, tolerance alone over `[tau_a3, tau_tol]`); composing the maps
-is incorrect because it over-credits the substrate. From these maps:
-
-- **Antagonism factor** `A_antag = Y_sim/Y_tol = A**rho * sigma_tol/(sigma_tol+(1-rho)*sigma_a3)`
-  (= 0.467; measured from the exact maps, 0.51) — factorizes into Treg-destruction `A**rho` and
-  substrate-competition `sigma_tol/(sigma_tol+(1-rho)sigma_a3)`.
-- **Order-inversion law** `tol-first optimal <=> A**rho > A <=> rho < 1`, crossover `rho* = 1`.
-- **Separatrix criterion** `Q = R_f/E_f > Q_crit` with `Q_crit = 0.886` the `R/E` ratio at the
-  toggle's saddle (located by bisection on the basin of the intervention-free (E,R) subsystem);
-  reproduces the cure *ordering* but not exact marginal-arm fractions (the proxy is blunt near the
-  separatrix — those need the full ODE).
-
-Validation: `verify_claims.py` asserts the antagonism factor (closed-form ≈ measured) and the
-order-inversion crossover (sign of `A**rho - A` flips at rho=1 and the ODE benefit flips with it).
-The only non-closed-form step is a short relaxation of the (E,R) subsystem across the inter-drug
-gap for the sequential arms.
+## 8. The original (withdrawn) v1 model — kept for the record
+The first study was a **3-state ODE** (β-mass `B`, effectors `E`, antigen-specific Tregs `R`) forming a
+mutual-repression bistable switch, in `t1d_model.py` (+ `t1d_experiments.py`, `t1d_calibration.py`,
+`t1d_analytic.py`, and the verified-biology rebuilds `t1d_model_v2/v3/v4.py`), verified by
+`verify_claims*.py`. Its headline — a tolerance-first *sequencing antagonism* — was **withdrawn** as an
+uncalibrated-operating-point artifact (`AUDIT.md` §reversal). It is retained because the correction trail is
+part of the work's integrity, and because the discrete-clonal `t1d_clonal.py` later reproduced the *real*
+(Foster) antagonism as a sub-continuum, co-dosing effect — superseding the v1 explanation.
