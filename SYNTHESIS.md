@@ -109,8 +109,15 @@ What the framework actually sticks its neck out on (falsifiable; ★ = already m
 12. ★ **Innate-targeting (anti-IL-1) has a narrow early window** — *fails at onset* (Moran 2013, established) because the adaptive attack self-sustains; predicted to **work as prevention** (the open half).
 13. ★ **Genotype sets the patient axes** — an HLA odds-ratio→escape map reproduces the onset-age gradient (Sharp 2019), DQ6 protection (Erlich 2008), and the insulin-first/GAD-first endotype (Bauer 2019), none of them fit to.
 
+14. ⚑ **(testable now, on existing data) Baseline-exhaustion stratification enriches teplizumab response** —
+    the model predicts ~56% unselected → **~91% (exhaustion-high) / ~25% (exhaustion-low)**, a +66-pt
+    enrichment a re-analysis of AbATE/TN10/PROTECT could confirm or kill (`responder_classifier.py`). The
+    rate (~50%, AbATE) and direction (Long/Wiedeman) are reproduced; the *enrichment magnitude* is the
+    forward bet. **The single most actionable prediction here** — and the natural one to bring to TrialNet.
+
 Predictions 1–4, 9–10, 13, and the onset-failure of 12 already land on published data (that the *same* model
-lands all of them is the point); 5–8, 11, and the prevention-half of 12 are the open, falsifiable bets.
+lands all of them is the point); 5–8, 11, the prevention-half of 12, and the **enrichment magnitude of 14**
+are the open, falsifiable bets.
 
 ---
 
