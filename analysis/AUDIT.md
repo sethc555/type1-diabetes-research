@@ -301,10 +301,107 @@ clean negative result:
   (deleting the specific just-activated converting clones) that a deterministic lumped-pool ODE averages
   away. This is now `FINDINGS_final.md`, asserted by **`verify_claims_vfinal.py` (7/7 PASS, capped)**.
 
-### Status of the published artifacts
+### Status of the published artifacts (2026-06-22 — ⚠ SUPERSEDED by the corrected-body audit §(viii) below; the corrected body is now public)
 
 The public v1 (README/FINDINGS/MANUSCRIPT/Zenodo/Pages/social) still asserts the withdrawn
 tolerance-first headline. A post-publication revision is **owed and pending sign-off**: README +
 FINDINGS now carry a SUPERSEDED banner pointing here and to `FINDINGS_final.md`; a Zenodo new version
 and a reply to the reviewer are prepared but **not yet sent** (held deliberately until the v-final is
 reviewed). v1's files are retained, clearly marked superseded, as the honesty record.
+
+---
+
+## Corrected-body audit (2026-06-27) — adversarial review of the calibrated multi-layer model
+
+_All entries above are dated 2026-06-22 and audit the **withdrawn v1** and the v-final structural negative.
+The work was then rebuilt into a calibrated, trial-validated, ten-model body (innate → β-stress hub → adaptive
+attack → epitope spreading → B-cell arm → metabolic readout; genetics as boundary conditions; avidity +
+discrete-clonal combination layer) that the entries above **never audited**. This section audits that body,
+applying the exact lesson the reversal taught: re-derivation is necessary but not sufficient — every
+load-bearing operating point needs an empirical anchor and a "does this invert the known clinical rationale?"
+check._
+
+### (i) Reproducibility — 19/19, and the attestation is now the right object
+`pubkit attest` → **19/19 claims reproduced** (`claims.yaml`/`attestation.json`, re-based 2026-06-27 off the
+withdrawn v1 thesis onto the corrected body: 4 calibrations, 10 mechanism layers, 4 validation/instrument
+results, + the v1 retained as an explicit `v1-withdrawn` correction-trail entry). 21 `verify_*.py` total, all
+green under the 4 GB cap. Reproducibility is not the question the reversal flagged — but it is sound, and the
+attested object is now the corrected body, not the retracted thesis.
+
+### (ii) Does it fix the v1 ROOT CAUSE? — YES (the operating points are now calibrated)
+The v1 error was an **uncalibrated operating point** (tolerance-mono ≈ 100%, anti-CD3 ≈ 0%) in which an
+"antagonism" was nearly forced. In the corrected body **every load-bearing rate is anchored to a published
+trial number**: late-disease kill rate κ≈0.60/yr ← TN10 placebo median (Herold 2019); spreading ≈0.04/yr and
+the multi-Ab hazard ← TEDDY/Ziegler; C-peptide k≈0.63/yr ← Shields 2018; anti-CD20 repopulation + B-dependence
+← Pescovitz 2014. There is no free "100%" monotherapy. The exact failure mode that sank v1 is **structurally
+removed**, and two independent datasets cross-validate the ~0.6/yr late rate (κ ↔ k_cpep, within 6%).
+
+### (iii) Does it INVERT the clinical rationale? — NO (the v1 check, now applied and passing)
+The corrected body **agrees with** clinical reality rather than arguing against it: antigen-specific tolerance
+**under-delivers** (which is *why* anti-CD3 is added); single-antigen tolerance is **escaped** by spreading;
+anti-CD20 is **transient** (Pescovitz); anti-IL-1 at onset is **too late** (explains the Moran 2013 null). The
+checkpoint-blockade prediction (reverses protective exhaustion → unleashes disease) **matches the documented
+checkpoint-inhibitor-induced T1D** — a built-in validation against an external fact. The rationale-inversion
+check that v1 failed, the corrected body passes.
+
+### (iv) Adversarial probes — what was tried, and the honest negatives kept visible
+- **Out-of-sample validation is the headline honesty check.** Leave-one-trial-out (`loo_validation.py`,
+  `verify_loo.py`): natural-history RATE predictions transfer to held-out trials to **~2%** (validated), but
+  **cross-stage DRUG-EFFECT extrapolation FAILS (39–132%)**. The model **self-reports its own decision-grade
+  boundary** — quantitative for natural history, a per-stage tool (not an extrapolator) for therapy. The exact
+  opposite of the v1 failure: it is now explicit about where it cannot be trusted.
+- **A "synergy" overclaim was caught and corrected.** The metabolic layer's two levers (C-peptide protection +
+  glucose control) are **ADDITIVE, not super-additive**; the earlier "synergize" framing was reverted to
+  "additive/independent" (`verify_metabolic.py`).
+- **An honest non-result is left unasserted.** The β-cell fragility lever-FLIP (P4) does not hold and is
+  **deliberately NOT asserted** (`verify_betacell.py`); β-protection is claimed only as an orthogonal,
+  non-antagonistic adjunct.
+- **A knob-independent structural negative.** The avidity continuum **cannot** reproduce the Foster antagonism
+  at any tuning; only a discrete-clonal/stochastic resolution can (`verify_avidity.py` / `verify_clonal.py`) —
+  a constraint on the mechanism class, not a fitted point.
+- **The actionable prediction is labeled a forward bet, not a result.** The exhaustion → teplizumab enrichment
+  (~56%→~91%/~25%, `responder_classifier.py`) is tagged throughout as a **re-analysis-testable prediction**:
+  its magnitude is a forward bet, its direction matches Long 2016 / Wiedeman 2019.
+- **Calibration identifiability is disclosed.** The TN10 median pins the product κ×E, not κ alone
+  (`calib_tn10.py`); the derived analytics (`analytic.py`) show the regeneration nonlinearity that *predicts*
+  why cross-stage transfer fails — the boundary is structural, not a tuning accident.
+
+### (v) Novelty honesty (Q2) — reconciled 2026-06-27
+The novelty was reconciled against the mechanistic within-host T1D modelling lineage (Khadra & Pietropaolo
+2011; Jaberi-Douraki et al. 2014–2015 — the framework the avidity layer is *built on*; Mahaffy &
+Edelstein-Keshet 2007) and the nearest decision-output neighbour (Morales & Klose 2024, full-text read). The
+"first within-host model / most T1D modelling is statistical-ML" **overclaim was removed** from `NOVELTY.md`
+and `MANUSCRIPT.md`; the work is now positioned as **extending** that lineage, the genuine (narrower) novelty
+led by the testable stratification prediction. See `NOVELTY.md` (revised 2026-06-27).
+
+### (vi) Honest limitations carried by the corrected body
+- Parameters are **illustrative beyond the four calibration anchors**; this is a reasoning/prioritisation
+  layer, not a fitted clinical predictor.
+- The combination result rests on **Foster 2025, an ADA conference abstract** (limited detail); the platform
+  axis reconciling Foster (antagonism) with Mathieu 2023 (safe co-dose) is a **hypothesis**, and the clonal
+  Foster reproduction is illustrative, not calibrated to Foster's data.
+- **Cross-stage drug-effect is explicitly not extrapolable** (the OOS boundary); any per-stage therapy claim
+  must be re-calibrated to that stage.
+- The stratification **enrichment magnitude is a forward, re-analysis-testable bet**, not a validated result.
+
+### (vii) Verdict
+The corrected body **fixes the v1 root cause** (calibrated operating points), **passes the rationale-inversion
+check** v1 failed, and **reports its own failure boundary** (OOS). Its claims are reproducible (19/19), its
+overclaims are caught (metabolic additive; novelty reconciled), and its honest negatives are kept visible (the
+β-cell non-result; the structural negative; the cross-stage boundary; the forward-bet stratification). Verdict:
+a **sound, calibrated, honestly-bounded hypothesis-generation model** — explicitly not a validated clinical
+result, now reconciled against its prior-art lineage. The reversal's lesson is satisfied of record.
+
+### (viii) Status of the published artifacts (current — supersedes the 2026-06-22 status above)
+- The **corrected body is PUBLIC** on GitHub (`origin/main`); the external reviewer's name + email were
+  **scrubbed from content AND history** (→ "an immunologist reviewer"); the v1 cluster is retained, clearly
+  marked superseded, as the honesty record.
+- The **attestation is re-based** to the corrected body (19/19); `pubkit guard` clean; `pubkit readiness`
+  floor 19/19.
+- The combination science **moved past the v-final "structural negative":** the platform axis + discrete-clonal
+  model (`FINDINGS_clonal.md`) reproduce Foster's antagonism as a **co-dosing** effect (anti-CD3 stochastically
+  extinguishing the just-activated converting clones) that **sequencing avoids**, reconciled with the safe human
+  co-dose (Mathieu 2023) via the platform axis. The "no population channel can flip the sign" statement in the
+  2026-06-22 reversal entry is the *population-model* result; the clone-level resolution is the current one.
+- **STILL PENDING (owed):** a **Zenodo new-version DOI** for the corrected body — the v1 DOI
+  (10.5281/zenodo.20804558) still points to the withdrawn artifact; the reviewer reply remains parked.
