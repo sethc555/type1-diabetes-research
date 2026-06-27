@@ -1,6 +1,6 @@
 {
-  "title": "Sequencing antagonism between anti-CD3 and antigen-specific tolerance in type 1 diabetes",
-  "description": "We build the first mechanistic within-host model of an unexplained pre-clinical drug-drug\ninteraction in type 1 diabetes. Foster et al. (2025, NOD mice) reported that anti-CD3 monoclonal\nantibody (teplizumab-class) reduces the efficacy of antigen-specific (mRNA/peptide) tolerance\nimmunotherapy - yet both are being pushed toward combination use, making sequencing a live clinical\nquestion. A three-state ODE in which autoreactive effectors and antigen-specific Tregs form a\nbistable switch driving beta-cell mass reproduces the Foster antagonism and yields a falsifiable\nprediction about how to time and sequence the two therapies. Illustrative modeling hypothesis, not\nvalidated clinical findings.",
+  "title": "A calibrated, trial-validated within-host model of type 1 diabetes immunotherapy",
+  "description": "We build a within-host model of the type 1 diabetes (T1D) immune attack, grown layer by layer to answer a connected set of immunotherapy questions, then calibrated to trial data and validated out-of-sample. The body spans the disease arc - an innate trigger priming a self-amplifying beta-cell-stress->neoantigen->adaptive-attack loop, epitope spreading, a B-cell/antibody arm, and a C-peptide/glucose readout, with HLA setting boundary conditions. Building on the mechanistic within-host T1D modelling lineage (Khadra/Jaberi-Douraki avidity; beta-cell and autoantibody ODE models), the same framework reconciles the contradictory Foster 2025 (co-dosing antagonism) and Mathieu 2023 (safe combination) results via a platform axis, reproduces the teplizumab response biomarkers, predicts checkpoint-inhibitor-induced T1D, and explains why several trials failed (anti-IL-1 too late; single-antigen tolerance escaped by spreading; anti-CD20 transient). Calibrated to TN10, TEDDY/Ziegler, Shields/PROTECT and Pescovitz, it shows a two-clock accelerating disease and predicts the natural history of held-out trials within ~2% in leave-one-trial-out validation, while honestly bounding cross-stage drug-effect extrapolation as unreliable. It yields one re-analysis-testable prediction: stratifying teplizumab by baseline CD8 exhaustion should raise response from ~56% (unselected) to ~91% (exhaustion-high). Every headline number is machine-verified. Illustrative within-host modeling / hypothesis generation - not validated clinical findings, not a cure.",
   "upload_type": "software",
   "access_right": "open",
   "license": "MIT",
@@ -13,11 +13,14 @@
   ],
   "keywords": [
     "type 1 diabetes",
-    "anti-CD3",
-    "teplizumab",
-    "antigen-specific tolerance",
     "within-host modeling",
-    "bistability",
-    "immunotherapy combination"
+    "teplizumab",
+    "anti-CD3",
+    "antigen-specific tolerance",
+    "epitope spreading",
+    "calibration",
+    "out-of-sample validation",
+    "patient stratification",
+    "immunotherapy"
   ]
 }
