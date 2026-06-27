@@ -1,38 +1,182 @@
 {
   "schema": "claimcheck/v0.1",
-  "manifest_sha256": "7ae0a58b8dd04e067101e847ebdb37495ab3d92caf4b07bcd0ab5713254147f2",
+  "manifest_sha256": "d6611671758b95f97a78b6fbfd7a9ddf66e9e829aa7ea90f25f8ff2467f67612",
   "artifact": {
-    "title": "Sequencing antagonism between anti-CD3 and antigen-specific tolerance in type 1 diabetes",
+    "title": "A calibrated, trial-validated within-host model of type 1 diabetes immunotherapy",
     "author": "Seth Cope",
     "orcid": "0009-0000-5520-915X",
     "doi": "",
     "repo": "https://github.com/sethc555/type1-diabetes-research",
-    "commit": null,
-    "working_tree_dirty": false
+    "commit": "cdfffe53184b2c9ee97405459ba84c729d418e66",
+    "working_tree_dirty": true
   },
   "verifier": {
     "name": "claimcheck",
     "version": "0.1.0"
   },
-  "verified_at": "2026-06-22T22:10:55.772851+00:00",
+  "verified_at": "2026-06-27T00:55:44.468774+00:00",
   "host": {
     "platform": "Linux-6.17.0-35-generic-x86_64-with-glibc2.39",
     "python": "3.12.3"
   },
-  "environment_hash": "sha256:5c919a0816d15ec4c3f38c15a1466794645df9876ff1e9e48be87a24037d72f8",
+  "environment_hash": "sha256:52d72ce284d28395654bd5ba86bbc18280a955098f7b43f49badb0e88c750930",
   "results": [
     {
-      "id": "all",
+      "id": "calib-tn10",
       "status": "pass",
       "exit_code": 0,
-      "duration_s": 58.2,
+      "duration_s": 1.8,
+      "detail": "",
+      "stdout_tail": "\n5/5 checks pass -- calibration #1 (disease timescale <- TN10)\n  kappa pins the placebo median (24.4 mo); a 24% anti-CD3 effect pins the teplizumab delay (48.4 mo); both plausible."
+    },
+    {
+      "id": "calib-teddy",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 0.7,
+      "detail": "",
+      "stdout_tail": "\n5/5 checks pass -- calibration #2 (spreading rate <- TEDDY/Ziegler)\n  spreading ~0.04/yr (single->multiple); multiple-Ab clock ~0.12/yr; progression requires spreading."
+    },
+    {
+      "id": "calib-cpeptide",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 0.9,
+      "detail": "",
+      "stdout_tail": "\n4/4 checks pass -- calibration #3 (C-peptide readout + 2 cross-validations)\n  ~0.6/yr late-disease kill rate confirmed by TN10 AND C-peptide decline; anti-CD3 effect transfers to PROTECT."
+    },
+    {
+      "id": "calib-pescovitz",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 0.5,
+      "detail": "",
+      "stdout_tail": "\n5/5 checks pass -- calibration #4 (anti-CD20 transience <- Pescovitz)\n  r_bc~4.7/yr + Tdom~0.18 reproduce the B-cell recovery and the finite 8.2-mo C-peptide shift."
+    },
+    {
+      "id": "spreading",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 0.6,
+      "detail": "",
+      "stdout_tail": "\n7/7 checks pass \u2014 epitope-spreading layer\n  single-antigen tolerance is escaped by spreading; EARLY/BROAD/beta-protection each defeat the escape."
+    },
+    {
+      "id": "bcell",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 0.9,
+      "detail": "",
+      "stdout_tail": "\n6/6 checks pass \u2014 B-cell / autoantibody layer\n  anti-CD20 is transient (B cells repopulate); works when B-cell-driven; tolerance + anti-CD20 > either alone."
+    },
+    {
+      "id": "betacell",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 0.6,
+      "detail": "",
+      "stdout_tail": "  [PASS] P3 combination preserves beta: 0.48\n\n4/4 checks pass -- beta-cell layer (self-amplifying loop + safe orthogonal combination)"
+    },
+    {
+      "id": "metabolic",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 0.5,
+      "detail": "",
+      "stdout_tail": "\n7/7 checks pass \u2014 metabolic / glucose layer\n  honeymoon reproduced; glucose control modest alone; metabolic+immune arms additive; C-peptide != glycemia."
+    },
+    {
+      "id": "innate",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 0.5,
+      "detail": "",
+      "stdout_tail": "\n7/7 checks pass \u2014 innate-immunity layer\n  innate is the upstream trigger; anti-innate prevents EARLY, fails at onset (Moran 2013); a narrow window."
+    },
+    {
+      "id": "genetics",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 0.7,
+      "detail": "",
+      "stdout_tail": "\n4/4 checks pass -- genetics / HLA calibration bridge\n  genotype->parameter map (real Erlich 2008 ORs) reproduces Sharp 2019 onset gradient, DQ6 protection, Bauer endotypes."
+    },
+    {
+      "id": "hierarchy",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 0.6,
+      "detail": "",
+      "stdout_tail": "  [PASS] P3 maintaining exhaustion alone does NOT fix a progenitor-driven non-responder: the influx is the problem\n\n6/6 checks pass -- hierarchy layer (checkpoint-T1D validation holds)"
+    },
+    {
+      "id": "avidity",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 2.8,
+      "detail": "",
+      "stdout_tail": "\n2/2 checks pass -- avidity layer: Foster antagonism is SUB-CONTINUUM\n  the avidity-resolved continuum can't produce it -> it needs discrete-clonal resolution (verify_clonal)."
+    },
+    {
+      "id": "clonal",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 23.4,
+      "detail": "",
+      "stdout_tail": "Discrete-clonal/stochastic dynamics REPRODUCE the Foster antagonism (continuum/bistable could\nnot): co-administered anti-CD3 stochastically extinguishes the just-activated converting clones\ntolerance needs -> protection collapses. Separating the two therapies in time restores efficacy."
+    },
+    {
+      "id": "responder",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 3.5,
+      "detail": "",
+      "stdout_tail": "  [PASS] blunting TSCM CONVERTS a non-responder: blunt renewal rescues\n\n6/6 checks pass -- responder layer (both teplizumab biomarkers reproduced)"
+    },
+    {
+      "id": "oos-validation",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 0.9,
+      "detail": "",
+      "stdout_tail": "\n5/5 checks pass -- out-of-sample validation\n  natural-history rates validate to a few %; cross-stage drug effects do not -> a measured trust boundary."
+    },
+    {
+      "id": "responder-classifier",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 5.5,
+      "detail": "",
+      "stdout_tail": "\n4/4 checks pass -- stratified responder classifier\n  predicted, falsifiable: baseline-exhaustion stratification raises teplizumab response ~56% -> ~91% (testable on existing trial data)."
+    },
+    {
+      "id": "trial-triage",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 20.4,
+      "detail": "",
+      "stdout_tail": "  [PASS] ranker: worst = checkpoint: CONTRAINDICATED\n\n14/14 checks pass -- trial-triage engine reproduces the body's verdicts"
+    },
+    {
+      "id": "analytic",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 0.5,
+      "detail": "",
+      "stdout_tail": "  [PASS] Delta=(1-Tdom)(1/r_bc)ln(1/Bc0) = 8.2mo (Pescovitz): 8.2 mo\n\n7/7 checks pass -- derived analytic formulas reproduce the real values"
+    },
+    {
+      "id": "v1-withdrawn",
+      "status": "pass",
+      "exit_code": 0,
+      "duration_s": 55.9,
       "detail": "",
       "stdout_tail": "\n============================================================\n24/24 checks passed"
     }
   ],
   "summary": {
-    "passed": 1,
-    "total": 1,
+    "passed": 19,
+    "total": 19,
     "all_passed": true
   },
   "signature": null,
