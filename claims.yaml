@@ -4,10 +4,10 @@
 schema: claimcheck/v0.1
 
 artifact:
-  title: "Sequencing antagonism between anti-CD3 and antigen-specific tolerance in type 1 diabetes"
+  title: "A calibrated, trial-validated within-host model of type 1 diabetes immunotherapy"
   author: "Seth Cope"
   orcid: "0009-0000-5520-915X"
-  doi: ""                       # minted at publish time (pubkit zenodo)
+  doi: ""                       # corrected-body DOI minted at re-publish (the v1 Zenodo DOI is withdrawn)
   repo: "https://github.com/sethc555/type1-diabetes-research"
 
 environment:
@@ -17,23 +17,162 @@ environment:
   memory_cap_mb: 4096           # enforced as a ulimit per claim
   timeout_s: 595
 
+# Each claim re-derives its headline number(s) from the model modules and asserts them within tolerance;
+# a regression trips a non-zero exit. Attests COMPUTATIONAL REPRODUCIBILITY only, not scientific correctness.
 claims:
-  - id: all
+  # ── Calibration to real trials (the data anchors) ───────────────────────────────────────────────
+  - id: calib-tn10
     statement: >-
-      The full verification suite re-derives and asserts every load-bearing number in FINDINGS.md
-      (24 checks): the effector<->Treg switch is bistable (autoimmune basin B->0.002, tolerant basin
-      B->0.931); untreated stage 2 reaches diagnosis in ~2 yr; anti-CD3 monotherapy only delays;
-      tolerance monotherapy gives 100% cohort durable control; anti-CD3 ANTAGONIZES tolerance when
-      given first/simultaneously; the sequencing rule holds (tol->anti-CD3 >= anti-CD3->tol, with
-      tol-first fully rescuing); the inter-drug gap prediction; no order-inversion in the
-      Treg-sparing regime (rho<1); and the two-channel caveat (order inverts at high rho). It also
-      PINS THE EXACT cited figures within tolerance: the cohort durable-control fractions
-      (0/0/100/58.8/41.2/100 %) and the calibration anchors (untreated median 2.06 yr, ~45%
-      progressed by 2 yr, anti-CD3 monotherapy delay +0.68 yr). The exact full-grid robustness
-      counts (171/171; 17/228) are reproduced by t1d_experiments.py (too slow for the per-claim cap;
-      verify asserts the invariant on a reduced grid). Finally it asserts the two DERIVED closed-form
-      criteria (t1d_analytic.py): the antagonism factor A^rho*sigT/(sigT+(1-rho)sigA) ~= measured
-      Y_sim/Y_tol, and the order-inversion law tol-first-optimal <=> A^rho > A <=> rho < 1 (crossover
-      rho*=1), each validated against the full ODE.
+      CALIBRATION #1 (calib_tn10): the disease timescale is fit to the TN10 placebo curve and the
+      anti-CD3 effect to the teplizumab arm (Herold 2019) at plausible, data-consistent values
+      (late-disease kill rate kappa ~0.60/yr; anti-CD3 effect ~24%).
+    reproduce: "python3 verify_calib.py"
+    expect: { exit_code: 0 }
+
+  - id: calib-teddy
+    statement: >-
+      CALIBRATION #2 (calib_teddy): the epitope-spreading rate (~0.04/yr) and the multiple-autoantibody
+      progression hazard are fit to the TEDDY/Ziegler natural history (44/70/84% at 5/10/15 yr; single-Ab
+      14.5% at 10 yr) with a tight fit.
+    reproduce: "python3 verify_calib_teddy.py"
+    expect: { exit_code: 0 }
+
+  - id: calib-cpeptide
+    statement: >-
+      CALIBRATION #3 (calib_cpeptide): the C-peptide readout is anchored to Shields 2018 (half-life 1.10
+      yr -> k ~0.63/yr) and -- the point -- CROSS-VALIDATES the late-disease rate kappa from an independent
+      dataset (within ~6%) and the anti-CD3 effect transferred to PROTECT.
+    reproduce: "python3 verify_calib_cpeptide.py"
+    expect: { exit_code: 0 }
+
+  - id: calib-pescovitz
+    statement: >-
+      CALIBRATION #4 (calib_pescovitz): the anti-CD20 transience is fit to Pescovitz 2014 -- B-cell
+      repopulation rate to the recovery curve and B-cell dependence to the observed 8.2-month
+      C-peptide-decline shift.
+    reproduce: "python3 verify_calib_pescovitz.py"
+    expect: { exit_code: 0 }
+
+  # ── Mechanism layers (the disease body) ─────────────────────────────────────────────────────────
+  - id: spreading
+    statement: >-
+      Epitope-SPREADING layer (t1d_spreading): spreading is threshold-gated and a single-antigen tolerance
+      is escaped as the disease recruits new specificities; the four predictions including the
+      antigens-recruited count hold.
+    reproduce: "python3 verify_spreading.py"
+    expect: { exit_code: 0 }
+
+  - id: bcell
+    statement: >-
+      B-CELL / autoantibody layer (t1d_bcell): anti-CD20 is transient, plus the responder axis, the
+      anti-CD20 + tolerance combination benefit, and the autoantibody-count readout.
+    reproduce: "python3 verify_bcell.py"
+    expect: { exit_code: 0 }
+
+  - id: betacell
+    statement: >-
+      BETA-CELL layer (t1d_betacell): the beta-cell stress feedback is self-amplifying; beta-protection
+      works orthogonally and combines SAFELY (non-antagonistic). The fragility lever-flip is an honest
+      non-result and is deliberately NOT asserted.
+    reproduce: "python3 verify_betacell.py"
+    expect: { exit_code: 0 }
+
+  - id: metabolic
+    statement: >-
+      METABOLIC / glucose layer (t1d_metabolic): the honeymoon (rise then fall), glucose control modest
+      alone, the two levers ~ADDITIVE (combo best, not super-additive), and the C-peptide vs glycemia
+      dissociation.
+    reproduce: "python3 verify_metabolic.py"
+    expect: { exit_code: 0 }
+
+  - id: innate
+    statement: >-
+      INNATE-immunity layer (t1d_innate): the EARLY WINDOW (innate-targeting prevents early, fails late),
+      the self-sustaining transition, innate upstream of the stress hub, and innate-precedes-adaptive
+      timing.
+    reproduce: "python3 verify_innate.py"
+    expect: { exit_code: 0 }
+
+  - id: genetics
+    statement: >-
+      GENETICS / HLA bridge (t1d_genetics): the genotype->parameter map anchored in REAL Erlich 2008 HLA
+      odds ratios reproduces higher OR/GRS -> younger onset (Sharp 2019), DR15-DQ6 protection, and the
+      endotype gradient (Bauer 2019).
+    reproduce: "python3 verify_genetics.py"
+    expect: { exit_code: 0 }
+
+  - id: hierarchy
+    statement: >-
+      HIERARCHY layer (t1d_hierarchy): the stem-like progenitor pool is the responder axis; CHECKPOINT
+      blockade reverses the protective exhaustion and UNLEASHES disease -- reproducing
+      checkpoint-inhibitor-induced T1D, a built-in validation.
+    reproduce: "python3 verify_hierarchy.py"
+    expect: { exit_code: 0 }
+
+  - id: avidity
+    statement: >-
+      AVIDITY layer (t1d_avidity): the avidity-resolved CONTINUUM does NOT reproduce the Foster antagonism
+      (not at baseline, not under preferential converter-deletion) -- the antagonism is SUB-CONTINUUM (the
+      structural negative; it requires discrete clones).
+    reproduce: "python3 verify_avidity.py"
+    expect: { exit_code: 0 }
+
+  - id: clonal
+    statement: >-
+      DISCRETE-CLONAL / stochastic model (Foster result), seed-robust: calibration; the SIMULTANEOUS
+      co-dosing antagonism is real and seed-robust; it is a co-dosing effect (vanishes without preferential
+      converter-deletion); and SEQUENCING rescues it.
+    reproduce: "python3 verify_clonal.py"
+    expect: { exit_code: 0 }
+
+  - id: responder
+    statement: >-
+      RESPONDER layer (t1d_responder): reproduces a partial teplizumab response rate and BOTH real
+      biomarker directions (baseline exhaustion -> responder, Wiedeman 2019; TSCM renewal -> non-responder,
+      Dufort 2026), plus the two conversion levers.
+    reproduce: "python3 verify_responder.py"
+    expect: { exit_code: 0 }
+
+  # ── Validation & decision instruments ───────────────────────────────────────────────────────────
+  - id: oos-validation
+    statement: >-
+      OUT-OF-SAMPLE validation (loo_validation): the model's natural-history RATE predictions transfer to
+      held-out trials within a few percent (VALIDATED), while its cross-stage DRUG-EFFECT extrapolations do
+      not (39-132%) -- the measured, honest decision-grade boundary.
+    reproduce: "python3 verify_loo.py"
+    expect: { exit_code: 0 }
+
+  - id: responder-classifier
+    statement: >-
+      STRATIFIED RESPONDER CLASSIFIER (responder_classifier): the unselected response rate matches AbATE
+      (~56%), responders carry more baseline exhaustion (Long/Wiedeman direction), and stratifying on
+      baseline exhaustion yields a large, monotonic ENRICHMENT (~56% -> ~91%) -- the falsifiable,
+      re-analysis-testable prediction.
+    reproduce: "python3 verify_responder_classifier.py"
+    expect: { exit_code: 0 }
+
+  - id: trial-triage
+    statement: >-
+      TRIAL-TRIAGE ENGINE (trial_triage): reproduces the body's verdicts -- the real trials that FAILED get
+      LIKELY-FAIL with the matching fix, the cautionary direction gets CONTRAINDICATED, the model's fixes
+      get FAVORABLE, and the ranker orders them correctly.
+    reproduce: "python3 verify_trial_triage.py"
+    expect: { exit_code: 0 }
+
+  - id: analytic
+    statement: >-
+      DERIVED ANALYTIC results (analytic): each closed form derived from the model equations reproduces the
+      real value -- multi-Ab h2=-ln(1-F)/t -> Ziegler; C-peptide half-life=ln2/k cross-validation; the
+      anti-CD20 shift Delta=(1-Tdom)(1/r_bc)ln(1/Bc0)=8.2 mo -- the formulas a reviewer can check by hand.
+    reproduce: "python3 verify_analytic.py"
+    expect: { exit_code: 0 }
+
+  # ── Correction trail (kept verifiable, NOT a current finding) ────────────────────────────────────
+  - id: v1-withdrawn
+    statement: >-
+      CORRECTION TRAIL -- the WITHDRAWN v1 model (the "tolerance-first sequencing antagonism", Zenodo
+      10.5281/zenodo.20804558) is retained in-repo and remains internally reproducible (verify_claims, 24
+      checks), but is SUPERSEDED: its headline rested on an uncalibrated operating point (post-mortem in
+      AUDIT.md). Attested only so the reversal stays verifiable, NOT as a current finding.
     reproduce: "python3 verify_claims.py"
     expect: { exit_code: 0 }
