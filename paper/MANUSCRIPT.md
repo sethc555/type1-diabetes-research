@@ -41,11 +41,14 @@ T1D results from autoimmune destruction of insulin-producing β-cells, with a lo
 (stages 1–2) during which intervention can delay clinical (stage 3) disease. The field now has several
 disease-modifying levers — anti-CD3 (teplizumab, the first approved), antigen-specific tolerance, anti-CD20,
 anti-IL-1, β-protective agents — but trials mostly disappoint, and a growing list of "failures" looks, in
-retrospect, like the *right drug at the wrong stage* or the *wrong combination*. The T1D modeling literature
-is largely statistical/ML; there is no mechanistic within-host framework that spans these interventions,
-reconciles their contradictory results, and says *why* specific trials failed. We build one — not to add a
-model, but to turn scattered, contradictory trial results into a coherent, falsifiable, *calibrated* design
-rationale, and to be honest about exactly how far it can be trusted.
+retrospect, like the *right drug at the wrong stage* or the *wrong combination*. Mechanistic within-host T1D
+models exist — a T-cell-avidity / β-cell ODE lineage (Khadra & Pietropaolo 2011; Jaberi-Douraki et al.
+2014–2015; Mahaffy & Edelstein-Keshet 2007) — and a recent prevention-trial simulator (Morales & Klose 2024)
+informs trial design. What is missing is a single mechanistic framework that *spans these disease-modifying
+interventions*, reconciles their contradictory results, says *why* specific trials failed, and is validated
+out-of-sample with a stated boundary. We build on that lineage to do this — not to add a model, but to turn
+scattered, contradictory trial results into a coherent, falsifiable, *calibrated* design rationale, honest
+about exactly how far it can be trusted.
 
 ## 2. Model and methods (summary)
 Each layer is the smallest within-host dynamical model reproducing a specific unexplained published result;
@@ -141,10 +144,12 @@ resolution is required (the van Kampen system-size boundary). Hence the avidity 
 while only the discrete-clonal model reproduces Foster.
 
 ## 5. Discussion
-To our knowledge this is the first within-host T1D model that spans these interventions, reconciles their
-contradictory trial results, explains specific failures mechanistically, and survives out-of-sample
-validation. Its value is not a cure or a discovery — every constituent mechanism is established biology — but
-a *reasoning and prioritization layer*: a falsifiable map of why interventions fail and what to test next.
+Building on the mechanistic within-host T1D lineage (Khadra/Jaberi-Douraki avidity; the β-cell and
+autoantibody ODE models), what we add is a single framework that spans these disease-modifying interventions,
+reconciles their contradictory trial results, explains specific failures mechanistically, and is validated
+out-of-sample with an explicit failure boundary — a combination we did not find in the surveyed literature.
+Its value is not a cure or a discovery — every constituent mechanism is established biology — but a *reasoning
+and prioritization layer*: a falsifiable map of why interventions fail and what to test next.
 The strongest "more than parameter-fitting" evidence is two-fold: a **knob-independent structural negative**
 (the avidity continuum cannot make Foster's antagonism) and **cross-dataset consistency** (the same rate from
 two cohorts; a drug effect fit on one stage predicting another) — neither of which free parameters can
@@ -188,3 +193,11 @@ author's direction; AI tools are not authors. **Competing interests:** none. **F
 10. Long SA, et al. Partial exhaustion of CD8 T cells and clinical response to teplizumab. *Sci Immunol* 2016; 1:eaai7793.
 11. Erlich H, et al. HLA DR-DQ haplotypes and genotypes and type 1 diabetes risk (T1DGC). *Diabetes* 2008; 57:1084–1092.
 12. Sharp SA, et al. Development and standardization of an improved T1D genetic risk score (GRS2). *Diabetes Care* 2019; 42:200–207.
+
+*Prior within-host T1D models (the lineage this work builds on):*
+13. Khadra A, Pietropaolo M, et al. Investigating the role of T-cell avidity and killing efficacy in relation to type 1 diabetes progression. *PLoS ONE* 2011; 6:e14796. doi:10.1371/journal.pone.0014796.
+14. Jaberi-Douraki M, Schnell S, Pietropaolo M, Khadra A. Unraveling the contribution of pancreatic β-cell suicide in autoimmune type 1 diabetes. *J Theor Biol* 2014. doi:10.1016/j.jtbi.2014.05.003.
+15. Jaberi-Douraki M, et al. Predictive models of type 1 diabetes progression: T-cell cycles and their implications on autoantibody release. *PLoS ONE* 2014; 9:e93326. doi:10.1371/journal.pone.0093326.
+16. Jaberi-Douraki M, Pietropaolo M, Khadra A. Continuum model of T-cell avidity: autoreactive and regulatory T-cell responses in type 1 diabetes. *J Theor Biol* 2015. doi:10.1016/j.jtbi.2015.07.032.
+17. Mahaffy JM, Edelstein-Keshet L. Modeling cyclic waves of circulating T cells in autoimmune diabetes. *Bull Math Biol* 2007.
+18. Morales JF, Klose M, et al. Type 1 diabetes prevention clinical trial simulator: case reports of a model-informed drug development tool. *CPT Pharmacometrics Syst Pharmacol* 2024. doi:10.1002/psp4.13193.

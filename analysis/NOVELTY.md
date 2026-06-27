@@ -6,19 +6,42 @@
 > [MEMO.md](MEMO.md). It claims novelty of *approach and hypothesis*, not of clinical validation.
 
 ## Novelty of the corrected body (the multi-layer model)
-The detailed assessment further down was written for the **withdrawn** v1 *sequencing-antagonism* claim; the
-combination layer's headline has since changed (to a *platform-dependent, sub-continuum* antagonism — see
-[FINDINGS_clonal.md](FINDINGS_clonal.md)), and the work grew into a calibrated, trial-validated multi-layer
-body. Honestly: **the individual mechanisms are established biology** — none is discovered here. The novelty
-is the **integration, the method, and the validated predictions**:
 
-| # | Novel piece | Why it is new |
+> **Revised 2026-06-27** after a comparable-paper search (Semantic Scholar + web) that the v1 sweeps below had
+> missed — they searched the *withdrawn sequencing* claim, not the corrected body's "calibrated within-host
+> model + decision output" claims. The search surfaced an established **mechanistic within-host T1D modelling
+> lineage** (including the very framework this repo's avidity layer is built on) and a 2024 T1D trial
+> simulator. The honest novelty is **narrower** than first written, and is re-stated here.
+
+**What this is NOT.** It is **not** the first mechanistic within-host model of T1D, and **not** the first model
+used for T1D trial design. A real ODE/continuum lineage predates it, and this repo's avidity layer *extends*
+that lineage rather than competing with it. Any claim of priority over those models would be false. The
+individual mechanisms are established biology — none is discovered here.
+
+### Closest prior art — the mechanistic within-host T1D modelling lineage (reconciled)
+| Prior work | What it is | Relation to this model |
 |---|---|---|
-| 1 | **The method as a reusable contribution** — reproduce an *unexplained published* result → smallest model → falsifiable prediction → *adversarial audit with open retraction* → *machine-verify every number*. | Most T1D modeling is statistical/ML; mechanistic models rarely adversarially audit + machine-verify + publicly retract. The disciplined pipeline + its self-auditing assumption registry/validator is the transferable contribution. |
-| 2 | **One framework that reconciles contradictory trials and explains failures.** | The *same* model reconciles Foster 2025 (antagonism) and Mathieu 2023 (safe) via a platform axis, and *explains why* anti-IL-1 (Moran 2013), single-antigen tolerance, and anti-CD20 (Pescovitz) failed — timing/escape/transience, not bad luck. No prior model spans these. |
-| 3 | **A calibrated, out-of-sample-validated within-host T1D model.** | Calibrated to four trials, it predicts the *natural history* of held-out trials to ~2% (and honestly bounds cross-stage therapy as un-extrapolable). A T1D within-host model that survives leave-one-trial-out is, in the surveyed corpus, new. |
-| 4 | **A re-analysis-testable stratification prediction** — baseline-exhaustion score → teplizumab enrichment ~56%→~91%/~25%, checkable on *existing* trial data. | Turns the model into a decision a network could act on, not a description. |
-| — | **A knob-independent structural negative** — the avidity continuum *cannot* reproduce Foster's antagonism (only discrete-clonal can). | A constraint on the mechanism class that holds regardless of parameter tuning. |
+| **Khadra & Pietropaolo 2011** (*PLoS ONE*, [10.1371/journal.pone.0014796](https://doi.org/10.1371/journal.pone.0014796)) | T-cell avidity / killing-efficacy ODE model of T1D progression. | **The parent framework** — the avidity layer (`t1d_avidity.py`) is built directly on it. |
+| **Jaberi-Douraki, Pietropaolo & Khadra 2015** (*J Theor Biol*, [10.1016/j.jtbi.2015.07.032](https://doi.org/10.1016/j.jtbi.2015.07.032)) | Continuum model of autoreactive + regulatory T-cell avidity. | Direct predecessor of our continuum treatment; mathematically **deeper** than our ODE layers. |
+| **Jaberi-Douraki & Schnell 2014** (*J Theor Biol*, [10.1016/j.jtbi.2014.05.003](https://doi.org/10.1016/j.jtbi.2014.05.003)) | β-cell "suicide"/stress contribution to autoimmune T1D. | Overlaps the β-cell-stress layer (`t1d_betacell.py`); we add the spreading/therapy coupling. |
+| **Jaberi-Douraki et al. 2014** (*PLoS ONE*, [10.1371/journal.pone.0093326](https://doi.org/10.1371/journal.pone.0093326)) | T-cell-cycle progression → autoantibody release. | Overlaps the B-cell/autoantibody layer (`t1d_bcell.py`). |
+| Integrated metabolism⊗autoimmune β-cell-death model ([PMC3522595](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3522595/)); **Mahaffy & Edelstein-Keshet 2007** (T-cell dynamics via Hopf/homoclinic bifurcation); CD8–β-cell ABM ([PMC5761894](https://pmc.ncbi.nlm.nih.gov/articles/PMC5761894/)) | Metabolism+autoimmune integration; bifurcation structure; a discrete-agent precedent. | Precedents for the metabolic layer, the bistable/threshold behaviour, and the discrete-clonal layer. The *integration idea* is not claimed as new. |
+| **Morales & Klose 2024** (*CPT:PSP*, [10.1002/psp4.13193](https://doi.org/10.1002/psp4.13193)) | T1D-prevention **clinical-trial simulator** (model-informed drug development) on **individual-level** TrialNet + TEDDY data; teplizumab-focused. | **The nearest decision-output neighbour, and better-resourced on the trial-design axis** (real per-patient data, published). We do **not** claim a better trial tool; our edge is mechanistic explanation + a per-patient biomarker prediction it does not produce. |
+
+### What is genuinely novel (narrower, graded honestly)
+1. **A re-analysis-testable stratification prediction** *(strongest)* — a baseline-CD8-exhaustion score → teplizumab response enrichment ~56%→~91%/~25%, checkable on **existing** TrialNet data (`responder_classifier.py`). It *extends* the Long 2016 / Wiedeman 2019 exhaustion biomarker into a quantitative, falsifiable enrichment; none of the models above makes a per-patient response prediction of this kind.
+2. **Leave-one-trial-out validation with an explicit failure boundary** — calibrated to four trials, it predicts held-out trials' *natural history* to ~2% and **openly reports that cross-stage drug-effect extrapolation does not transfer** (39–132%). The surveyed mechanistic models are not OOS-cross-validated with a stated boundary; Morales fits a joint model rather than reporting where it breaks.
+3. **One framework that reconciles contradictory combination trials** — Foster 2025 (antagonism) vs Mathieu 2023 (safe) via a platform axis (`t1d_clonal.py`). *A hypothesis resting partly on a conference abstract, not a finding* — but no prior model spans the pair.
+4. **A knob-independent structural negative** — the avidity continuum (the Khadra/Jaberi-Douraki framework) *cannot* reproduce the Foster antagonism; only discrete-clonal resolution can. A mechanism-class constraint that holds regardless of tuning — and a negative result *about the lineage we build on*.
+5. **The method, as a credibility (not scientific) contribution** — reproduce an unexplained published result → smallest model → falsifiable prediction → adversarial audit *with open retraction* → machine-verified attestation of every number. Distinctive as a practice; explicitly **not** a new biological result.
+
+### Honest bottom line
+This is **not a first or a best-in-class** T1D model. It is **broader in scope** than any single prior model
+(innate → spreading → B-cell → metabolic → genetics in one body — scope trades against depth, it is not a win),
+**more explicit about where it fails**, and it carries **one specific, testable, decision-relevant prediction**
+the prior models do not. Its value does not rest on novelty or on beating those models — it rests on being
+*calibrated, honestly bounded, and checkable against data a network already holds*. Framed that way (extension
++ a falsifiable prediction, never priority), it is a legitimate contribution and safe to post.
 
 Cross-layer transfers (the exhaustion sign-flip to cancer/HIV; the β-cell-stress hub shared across the
 spreading/metabolic/innate layers) are reasoning patterns, not new biology, and are presented as such.
@@ -28,6 +51,10 @@ spreading/metabolic/innate layers) are reasoning patterns, not new biology, and 
 > The assessment below is the original **v1 (sequencing)** novelty + the prior-art sweeps, retained as the
 > record. Its prior-art landscape — *no mechanistic within-host model of the anti-CD3 × antigen-specific-
 > tolerance combination* — still frames the combination layer (`t1d_clonal.py`).
+>
+> **Superseded:** the v1 table's broad characterisation of T1D modelling as "statistical/ML" is **corrected by
+> the lineage reconciliation above** — a mechanistic within-host T1D modelling literature does exist (Khadra,
+> Jaberi-Douraki, Mahaffy & Edelstein-Keshet). Only the *specific drug-combination* gap remains open.
 
 ## What is novel here (v1 — combination layer, retained as record)
 
