@@ -105,7 +105,42 @@ Wiedeman 2019 biomarker direction, and predicts the **enrichment from stratifica
 without a new trial: if a re-analysis by the baseline-exhaustion (or TSCM) signature recovers an enrichment
 of this size, *"teplizumab works, in the exhaustion-high subgroup"* becomes an evidenced, actionable claim.
 
-## 4. Discussion
+## 4. Derived analytic results (the model → closed-form → number chain)
+Several headline results follow in *closed form* from the model equations, so a reviewer can check the
+model→formula→number chain by hand; `analytic.py` (asserted by `verify_analytic.py`, 7/7) re-derives each
+and verifies it against the real value.
+
+**(i) The two clocks, exactly.** The pre-clinical natural history is a *linear* compartmental chain
+S₁ →(s) S₂ →(h₂) D (single → multiple autoantibody → clinical; direct single-Ab progression h₁=0), with exact
+solutions — from the multiple-Ab state, D(t)=1−e^(−h₂t) ⟹ **h₂ = −ln(1−F)/t**; from the single-Ab state,
+D(t)=1−e^(−st)−[s/(h₂−s)](e^(−st)−e^(−h₂t)). Fitting h₂ to 44% at 5 yr (Ziegler) gives h₂=0.116/yr and
+reproduces 69%/82% at 10/15 yr (obs 70/84); fitting s to single-Ab 14.5% at 10 yr gives the spreading rate
+s≈0.04/yr. The final-approach clock is the post-diagnosis C-peptide decline C(t)=C₀e^(−kt), half-life
+**t½ = ln2/k**; Shields' t½=1.10 yr gives k=0.63/yr — equal within 6% to the late-disease kill rate κ=0.60/yr
+calibrated *independently* from the TN10 median. The same ~0.6/yr rate from two unrelated datasets is a
+closed-form cross-validation.
+
+**(ii) The anti-CD20 transient shift, in closed form.** With β-cell kill scaled by B-cell help
+help(t)=T_dom+(1−T_dom)B_c(t) and exponential C-peptide decline, the net curve shift is the integrated loss
+of help, Δ=∫₀^∞(1−help)dt=(1−T_dom)∫₀^∞(1−B_c)dt. For logistic repopulation from B_c0 at rate r_bc,
+∫₀^∞(1−B_c)dt=(1/r_bc)·ln(1/B_c0) exactly, giving **Δ = (1−T_dom)·(1/r_bc)·ln(1/B_c0)**. With the calibrated
+T_dom=0.18, r_bc=4.7/yr, B_c0=0.02 this is **Δ = 8.2 months** — the exact shift Pescovitz 2014 reported.
+
+**(iii) Why the validation boundary exists, analytically.** Stage-2 progression is dB/dt=ρ_B·B(1−B)−κ·B; to
+leading order the onset time is T=ln(B₀/B_clin)/κ and teplizumab (κ→κ(1−eff)) gives T_tep/T_pbo=1/(1−eff) —
+*linear* readings. But the logistic regeneration term makes T(κ) nonlinear, so the *effective* drug effect is
+regime-dependent (no-regen eff=50% vs full-ODE 24%). That is precisely why cross-stage drug-effect transfer
+fails in leave-one-trial-out (39–132%) while the *linear* natural-history rates in (i) transfer to ~2%: the
+analytic structure predicts the empirical trust boundary.
+
+**(iv) The structural negative, as a scaling argument.** The Foster co-dosing antagonism requires anti-CD3 to
+drive the small converting-clone count to *zero* before conversion completes; for a converting pool of mean
+size n, P(extinction during the pulse) ~ e^(−c·n) → 0 in the continuum (n→∞) limit. A continuum / avidity-
+resolved density never reaches zero, so it *cannot* produce the antagonism — discrete-clonal/stochastic
+resolution is required (the van Kampen system-size boundary). Hence the avidity continuum predicts synergy
+while only the discrete-clonal model reproduces Foster.
+
+## 5. Discussion
 To our knowledge this is the first within-host T1D model that spans these interventions, reconciles their
 contradictory trial results, explains specific failures mechanistically, and survives out-of-sample
 validation. Its value is not a cure or a discovery — every constituent mechanism is established biology — but
@@ -126,19 +161,20 @@ validator's own caveat: it cannot see unknown-unknowns) are stated in `validate.
 prior headline was already wrong and withdrawn — the reason the framing throughout is hypothesis-level, and
 the reason the audit trail and machine-verification are part of the contribution, not an afterthought.
 
-## 5. Data and code availability
+## 6. Data and code availability
 All code, the literature corpus, the verification harness, the assumption registry/validator, and the audit
 trail are openly available: https://github.com/sethc555/type1-diabetes-research (the withdrawn v1 is archived
 at Zenodo DOI 10.5281/zenodo.20804558; a corrected-version DOI is pending the publish decision). Running
-`cd analysis && python3 validate.py --run` re-derives every headline number (19 verify scripts).
+`cd analysis && python3 validate.py --run` re-derives every headline number (the full `verify_*.py` harness),
+and `python3 analytic.py` re-derives the closed forms of §4.
 
-## 6. Disclosures
+## 7. Disclosures
 **Status:** illustrative within-host modeling / hypothesis generation; not validated experimental or clinical
 findings, not medical advice. **AI assistance:** developed with substantial help from an AI
 coding/analysis assistant (Anthropic Claude) for implementation, derivation, audit, and drafting, under the
 author's direction; AI tools are not authors. **Competing interests:** none. **Funding:** none.
 
-## 7. References (key — full prior-art assessment in [`../analysis/NOVELTY.md`](../analysis/NOVELTY.md))
+## 8. References (key — full prior-art assessment in [`../analysis/NOVELTY.md`](../analysis/NOVELTY.md))
 
 1. Foster J, et al. Anti-CD3 reduces the efficacy of antigen-specific immunotherapy in NOD mice. *Diabetes* 2025; 74(Suppl 1), 2136-LB.
 2. Mathieu C, et al. (AG019 ± teplizumab, antigen-specific tolerance, human). 2023.
